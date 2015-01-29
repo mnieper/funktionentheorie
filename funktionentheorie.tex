@@ -1,0 +1,3116 @@
+\documentclass[a4paper,twoside,openright]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{german}
+\usepackage{amsmath}
+\usepackage{amsxtra}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{fancyhdr}
+
+\newtheorem{thm}{Satz}[chapter]
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Folgerung}
+\theoremstyle{definition}
+\newtheorem{dfn}[thm]{Definition}
+\newtheorem{xca}[thm]{Beispiel}
+\theoremstyle{remark}
+\newtheorem{rmk}[thm]{Bemerkung}
+\newtheorem{ex}[thm]{Aufgabe}
+
+\renewcommand{\proofname}{Beweis}
+
+\renewcommand\theenumi{\alph{enumi}}
+\renewcommand\labelenumi{(\theenumi)}
+
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\totient}{\phi}
+
+\title{Ausgewählte Kapitel der Funktionentheorie}
+\author{Marc Nieper-Wißkirchen}
+\date{Wintersemester 2014/15\footnote{\today}}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Dirichletsche Reihen}
+
+\section{Allgemeine Dirichletsche Reihen}
+
+\begin{dfn}
+  Sei eine Folge $(\lambda_n)$ aufsteigender reeller Zahlen gegeben, für die $\lim_{n \to \infty} \lambda_n = \infty$ gilt. Eine
+  \emph{Dirichletsche Reihe mit Exponenten $(\lambda_n)$} ist eine Reihe der Form
+  \[
+    \sum_n a_n e^{-\lambda_n s}
+  \]
+  mit $a_n \in \mathbf C$ und einer komplexen Variable $s \in \mathbf C$, deren
+  Realteil wir im folgenden immer mit $\sigma$ und deren Imaginärteil wir
+  mit $t$ bezeichnen wollen ($s = \sigma + i t$).
+\end{dfn}
+
+\begin{xca}
+  Sei $\lambda_n = \log(n)$. Dann heißt
+  \[
+    \sum_{n = 1}^\infty a_n n^{-s}
+    \coloneqq
+    \sum_{n=1}^\infty a_n e^{-(\log n) s} 
+  \]
+  eine \emph{gewöhnliche Dirichletsche Reihe}.
+\end{xca}
+
+\begin{xca}
+  Sei $\lambda_n = n$. Dann ist
+  \[
+    \sum_{n = 0}^\infty a_n e^{-n s} = \sum_{n = 0}^\infty a_n (e^{-s})^n
+  \]
+  eine Potenzreihe in $z = e^{-s}$.
+\end{xca}
+
+\begin{lem}[Abelsches Lemma]
+  \label{lem:abel}
+  Seien $(a_n)$ und $(b_n)$ zwei Folgen komplexer Zahlen. Setzen wir
+  \[
+    A_{m, p} \coloneqq \sum_{n = m}^p a_n
+  \]
+  und
+  \[
+    S_{m, m'} \coloneqq \sum_{n = m}^{m'} a_n b_n,
+  \]
+  so gilt
+  \[
+    S_{m, m'} = \sum_{n = m}^{m' - 1} A_{m, n} (b_n - b_{n + 1}) + A_{m, m'} b_{m'}.
+  \]
+\end{lem}
+
+\begin{proof}
+  Durch $a_n = A_{m, n} - A_{m, n - 1}$ eliminieren wir $a_n$ im Ausdruck $S_{m, m'}$ auf
+  der linken Seite.
+\end{proof}
+
+\begin{lem}
+  \label{lem:dirichlet1}
+  Seien $0 < \alpha < \beta$ zwei reelle Zahlen. Sei weiter $s = \sigma + i t$ mit
+  $\sigma > 0$. Dann gilt
+  \[
+    |e^{-\alpha s} - e^{-\beta s}| \leq \frac{|s|}\sigma (e^{-\alpha \sigma}  - e^{-\beta \sigma}).
+  \]
+\end{lem}
+
+\begin{proof}
+  Es ist
+  \[
+    e^{-\alpha s} - e^{-\beta s} = s \int_{\alpha}^\beta e^{-\lambda s} \, d\lambda.
+  \]
+  Also
+  \[
+    |e^{-\alpha s} - e^{-\beta s}| \leq |s| \int_{\alpha}^\beta |e^{-\lambda s}| \, d\lambda
+    = |s| \int_\alpha^\beta e^{-\lambda \sigma} \, d\lambda
+    = \frac{|s|} \sigma (e^{-\alpha \sigma} - e^{-\beta \sigma}).
+    \qedhere
+  \]
+\end{proof}
+
+\begin{prop}
+  Konvergiere die Dirichletsche Reihe $f(s) = \sum_n a_n \exp^{- \lambda_n s}$ für $s = s_0$. Dann 
+  konvergiert sie gleichmäßig auf jedem Winkel der Form
+  \[
+    \{s \mid 0 \leq |s - s_0|/(\sigma - \sigma_0) \leq k\}
+  \]
+  mit $k \ge 0$.
+\end{prop}
+
+\begin{proof}
+  Ohne Beschränkung der Allgemeinheit sei $s_0 = 0$. 
+  Wir müssen die gleichmäßige Konvergenz auf jedem Winkel $\{s \mid 0 \leq |s|/\sigma \leq k\}$ zeigen. 
+  Sei $\epsilon > 0$.
+  Nach Voraussetzung ist die Reihe $\sum_n a_n$ konvergent, so daß in den
+  Bezeichnungen von Lemma~\ref{lem:abel} gilt, daß $|A_{m, m'}| < \epsilon$
+  für $m, m' \gg 0$. Wenden wir das Lemma auf $b_n = e^{-\lambda_n s}$ an,
+  so erhalten wir
+  \[
+    S_{m, m'} = \sum_{n = m}^{m' - 1} A_{m, n} (e^{- \lambda_n s} - e^{-\lambda_{n + 1} s}) + A_{m, m'} e^{-\lambda_{m'} s}. 
+  \]
+  Nach Lemma~\ref{lem:dirichlet1} erhalten wir also
+  \[
+    |S_{m, m'}| \leq \epsilon \left(
+      \frac{|s|}{\sigma} \sum_{n = m}^{m' - 1} (e^{-\lambda_n \sigma} - e^{-\lambda_{n + 1} \sigma}) + 1\right)
+    \leq \epsilon \, (k \, (e^{-\lambda_m \sigma} - e^{-\lambda_{m'} \sigma}) + 1).
+  \]
+  Es folgt $|S_{m, m'}| < \epsilon \, (k + 1)$ für $m, m' \gg 0$, also
+  die gleichmäßige Konvergenz.
+\end{proof}
+
+\begin{cor}
+  Konvergiere die Dirichletsche Reihe $f(s)$ für $s = s_0$, so konvergiert sie
+  auch auf der offenen Halbebene $\sigma > \sigma_0$, und zwar stellt sie dort
+  eine holomorphe Funktion dar.
+\end{cor}
+
+\begin{proof}
+  Daß $f(s)$ auf $\{s \mid \sigma > \sigma_0\}$ holomorph ist, folgt aus dem
+  Weierstraßschen Konvergenzsatz.
+\end{proof}
+
+\begin{cor}
+  Für jede Dirichletsche Reihe $f(s) = \sum_n a_n e^{-\lambda_n s}$ existiert genau ein $-\infty \leq \rho \leq \infty$, so daß
+  $f(s)$ auf der offenen Halbebene $\sigma > \rho$ konvergiert, auf der offenen Halbebene $\sigma < \rho$ aber divergiert. Der Wert
+  $\rho$ heißt die \emph{Konvergenzabzisse von $f(s)$}. Die Konvergenzabzisse $\rho^+$ von $\sum_n |a_n| e^{-\lambda_n s}$ heißt die
+  \emph{absolute Konvergenzabzisse von $f(s)$}. Es konvergiert $f(s)$ absolut für die offene Halbebene $\sigma > \rho^+$ und divergiert absolut für die
+  offene Halbebene $\sigma < \rho^+$. Insbesondere gilt $\rho^+ \ge \rho$.
+  \qed
+\end{cor}
+
+\begin{xca}
+  Im Falle von $\lambda_n = n$, also einer Potenzreihe, gilt $\rho = \rho^+$.
+\end{xca}
+
+\begin{cor}
+  Die Dirichletsche Reihe $f(s)$ konvergiere für $s_0$. Sie stellt dann eine stetige Funktion auf jedem Winkel
+  $\{s \mid 0 \leq |s - s_0|/(\sigma - \sigma_0) \leq k\}$ mit $k \ge 0$ dar.
+\end{cor}
+
+\begin{proof}
+  Der Grenzwert einer gleichmäßig konvergenten Folge stetiger Funktionen ist
+  wieder stetig.
+\end{proof}
+
+\begin{cor}
+  Die Funktion $f(s) = \sum_n a_n e^{-\lambda_n} s$ verschwindet
+  genau dann identisch, wenn alle Koeffizienten $a_n$ verschwinden. 
+\end{cor}
+
+\begin{proof}
+  Sei $f(s) = \sum_{n = 0}^\infty a_n e^{-\lambda_n}$. Es reicht offensichtlich,
+  $a_0 = 0$ zu zeigen. Aus der gleichmäßigen Konvergenz folgt
+  \[
+    0 = \lim_{\sigma \to \infty} (e^{\lambda_0 s} f(s))
+    = \lim_{\sigma \to \infty} \sum_{n = 0}^\infty a_n e^{(\lambda_0 - \lambda_n) s}
+    = \sum_{n = 0}^\infty a_n \lim_{\sigma \to \infty} e^{(\lambda_0 - \lambda_n) s}
+    = a_0.
+    \qedhere
+  \]
+\end{proof}
+
+\section{Dirichletsche Reihen mit positiven Koeffizienten}
+
+\begin{prop}
+  \label{prop:positivity}
+  Sei $f(s) = \sum_n a_n e^{-\lambda_n s}$ eine Dirichletsche Reihe mit
+  reellen Koeffizienten $a_n \ge 0$. Sei $\rho \in \mathbf R$, so daß
+  $f(s)$ in der Halbebene $\sigma > \rho$ konvergiert. Weiter möge sich die
+  Funktion $f(s)$ analytisch auf eine Umgebung um den Punkt $\rho \in \mathbf C$
+  fortsetzen. Dann existiert ein $\epsilon > 0$, so daß $f(s)$ auf der Halbebene
+  $\sigma > \rho - \epsilon$ konvergiert.
+  
+  Mit anderen Worten wird der Konvergenzbereich von $f(s)$ durch eine Singularität
+  auf der reellen Achse begrenzt.
+\end{prop}
+
+\begin{proof}
+  Ohne Beschränkung der Allgemeinheit können wir annehmen, daß
+  $\rho = 0$.
+  Nach Voraussetzung ist der Konvergenzradius der Taylorentwicklung von $f(s)$ um
+  $s = 1$ größer als $1$, etwa $1 + 2 \epsilon$ mit $\epsilon > 0$.
+  
+  Nach dem Weierstraßschen Konvergenzsatz ist
+  \[
+    f^{(k)}(s) = \sum_n a_n (-\lambda_n)^k e^{-\lambda_n s},
+  \]
+  also
+  \[
+    f^{(k)}(1) = (-1)^k \sum_n \lambda_n^k a_n e^{-\lambda_n}.
+  \]
+  Es gilt
+  \[
+    f(s) = \sum_{k = 0}^\infty \frac {(s - 1)^k} {k!} f^{(k)}(1)
+  \]
+  für $|s - 1| < 1 + 2 \epsilon$,
+  und insbesondere ist
+  \[
+    f(-\epsilon) = \sum_{k = 0}^\infty \frac {(1 + \epsilon)^k} {k!} (-1)^k f^{(k)}(1)
+  \]
+  eine konvergente Reihe.
+  
+  Es ist $(-1)^k f^{(k)}(1) = \sum_n \lambda_n^k a_n e^{-\lambda_n}$
+  sogar eine absolut konvergente Reihe. Die Doppelreihe
+  \[
+    f(-\epsilon) = \sum_{k = 0}^\infty \sum_n a_n \frac {(1 + \epsilon)^k}{k!} \lambda_n^k e^{-\lambda_n}
+  \]
+  ist damit ebenfalls absolut konvergent, und durch Umordnung folgt:
+  \[
+    f(-\epsilon) = \sum_n a_n e^{-\lambda_n} \sum_{k = 0}^\infty \frac {(1 + \epsilon)^k}{k!} \lambda_n^k
+    = \sum_n a_n e^{-\lambda_n} e^{\lambda_n (1 + \epsilon)} = \sum_n a_n e^{\lambda_n \epsilon},
+  \]
+  so daß die Dirichletsche Reihe auch für $-\epsilon$ konvergiert. 
+\end{proof}
+
+\section{Gewöhnliche Dirichletsche Reihen}
+
+\begin{prop}
+  \label{prop:dirichlet1}
+  Sei die Folge $(a_n)$ beschränkt. Dann konvergiert die (gewöhnliche) Dirichletsche
+  Reihe
+  \[
+    f(s) = \sum_{n = 1}^\infty \frac{a_n}{n^s}
+  \]
+  absolut auf der Halbebene $\sigma > 1$.
+\end{prop}
+
+\begin{proof}
+  Sei $\alpha > 1$ reell. Die Reihe $\sum_n \frac{|a_n|}{n^\alpha}$ wird bis auf einen konstanten Faktor
+  durch die Reihe $\sum_{n = 1}^\infty \frac 1 {n^\alpha}$ nach oben abgeschätzt, 
+  die bekanntlich konvergiert. Damit gilt $\rho^+ \leq 1$ für die absolute Konvergenzabzisse
+  von $f(s)$.
+\end{proof}
+
+\begin{prop}
+  \label{prop:convergence_zero}
+  Seien die Partialsummen $A_{m, p} \coloneqq \sum_{n = m}^p a_n$ beschränkt. Dann konvergiert
+  die Reihe
+  \[
+    f(s) = \sum_{n = 1}^\infty \frac{a_n}{n^s}
+  \]
+  auf der Halbebene $\sigma > 0$.
+\end{prop}
+
+\begin{proof}
+  Aufgrund des Konvergenzverhalten allgemeiner Dirichletscher Reihen reicht
+  es zu zeigen, daß $f(s)$ für reelles $s > 0$ konvergiert.
+    
+  Sei $C$ eine obere Schranke der $|A_{m, p}|$. Nach Lemma~\ref{lem:abel}
+  gilt dann mit den dortigen Bezeichnungen und $b_n = \frac 1 {n^s}$, daß
+  \[
+    |S_{m, m'}| \leq C \left(
+      \sum_{n = m}^{m' - 1} \left|\frac 1{n^s} - \frac 1 {(n + 1)^s}\right| + \left|\frac 1 {m^{\prime s}}\right|
+    \right) = \frac C{m^s},
+  \]
+  woraus die Konvergenz nach dem Cauchyschen Kriterium folgt.
+\end{proof}
+
+\chapter{$L$-Funktionen}
+
+\section{Eulersche Produkte}
+
+\begin{dfn}
+  Eine Funktion $f\colon \mathbf N \to \mathbf C$ heißt \emph{multiplikativ},
+  falls $f(1) = 1$ und falls
+  \[
+    f(mn) = f(m) f(n)
+  \]
+  für alle teilerfremden positiven natürlichen Zahlen $m$ und $n$.
+\end{dfn}
+
+\begin{lem}
+  \label{lem:multiplicative}
+  Sei $f$ eine beschränkte multiplikative Funktion. Dann konvergiert
+  die Dirichletsche Reihe
+  \[
+    \sum_{n = 1}^\infty \frac{f(n)}{n^s}
+  \]
+  auf der Halbebene $\sigma > 1$ absolut gegen das konvergente unendliche
+  Produkt
+  \[
+    \prod_p \left(\sum_{m = 0}^\infty \frac{f(p^m)}{p^{m s}}\right),
+  \]
+  wobei $p$ hier und im folgenden jeweils die Menge der Primzahlen durchlaufe.
+\end{lem}
+
+\begin{proof}
+  Die absolute Konvergenz der Dirichletschen Reihe folgt aus Proposition~\ref{prop:dirichlet1}
+  aufgrund der Beschränktheit der Folge $(f(n))$. Die einzelnen Faktoren des
+  unendlichen Produktes sind bis auf eine multiplikative Konstante durch
+  $\sum_{m = 0}^\infty p^{-m \sigma} = \frac 1 {1 - p^{-\sigma}}$ beschränkt und damit absolut
+  konvergent und konvergieren für $p \to \infty$ gegen $1$.
+  
+  Sei $\mathbf N(x)$ die Menge der natürlichen Zahlen, deren Primfaktoren alle
+  höchstens $x$ sind. Aufgrund des Satzes über die eindeutige Primfaktorzerlegung
+  gilt dann
+  \[
+    \sum_{n \in \mathbf N(x)} \frac{f(n)}{n^s} = \prod_{p \leq x}
+    \left(\sum_{m = 0}^\infty f(p^m) p^{-ms}\right).
+  \]
+  Der Limes $x \to \infty$ liefert dann die Behauptung.
+\end{proof}
+
+\begin{xca}
+  \label{xca:multiplicative}
+  Ist $f$ sogar multiplikativ im strikten Sinne, das heißt
+  \[
+    f(n n') = f(n) f(n')
+  \]
+  für alle positiven natürlichen Zahlen $n$ und $n'$, so gilt
+  \[
+    \sum_{n = 1}^\infty \frac{f(n)}{n^s} = \prod_p \frac 1 {1 - f(p) p^{-s}}.
+  \]
+\end{xca}
+
+\begin{prop}
+  \label{prop:multiplicative}
+  Sei $f$ strikt multiplikativ und beschränkt und
+  \[
+    F(s) = \sum_{n = 1}^\infty \frac{f(n)}{n^s}
+  \]
+  die zugehörige Dirichletsche Reihe. Für die \emph{logarithmische Ableitung}
+  von $F(s)$ gilt dann
+  \[
+    - \frac d{ds} \log F(s) \coloneqq - \frac{F'(s)}{F(s)} =
+    \sum_{n = 1}^\infty \frac{f(n) \Lambda(n)}{n^s}
+  \]
+  in kompakter Konvergenz auf der offenen Halbebene $\sigma > 1$, wobei
+  $\Lambda\colon \mathbf N \to \mathbf C$ die \emph{von Mangoldtsche Funktion}
+  ist, die durch $\Lambda(p^m) = \log p$ für Primzahlen $p$ und $m \ge 1$ und
+  $\Lambda(n) = 0$ für alle anderen $n$ gegeben ist.
+\end{prop}
+
+\begin{proof}
+  Es gilt
+  \[
+    \begin{split}
+      - \frac d{ds} \log F(s)
+      & = - \frac{d}{ds} \log \prod_p \frac{1}{1 - f(p) p^{-s}}
+      \\
+      & = \sum_p \frac{d}{ds} \log(1 - f(p) p^{-s})
+      \\
+      & = \sum_p \frac{f(p) (\log p) p^{-s}}{1 - f(p) p^{-s}}
+      \\
+      & = \sum_p \sum_{m \ge 1} f(p^m) (\log p) p^{-ms}
+      \\
+      & = \sum_{n \ge 1} \frac{f(n) \Lambda(n)}{n^s}.
+      \qedhere
+    \end{split}
+  \]
+\end{proof}
+
+\section{Die Riemannsche Zeta-Funktion}
+
+\begin{dfn}
+  Die \emph{Riemannsche Zeta-Funktion $\zeta(s)$} ist auf der offenen Halbebene $\sigma > 1$ 
+  die dort absolut konvergente Dirichletsche Reihe 
+  \[
+    \zeta(s) = \sum_{n = 1}^\infty \frac 1 {n^s} = \prod_p \frac 1 {1 - p^{-s}}.
+  \] 
+\end{dfn}
+
+\begin{prop}
+  \begin{enumerate}
+  \item
+    \label{it:zeta1}
+    Die Riemannsche Zeta-Funktion hat keine Nullstelle für $\sigma > 1$ und ist dort
+    holomorph.
+  \item
+    \label{it:zeta2}
+    Die Funktion
+    \[
+      \zeta(s) - \frac 1 {s - 1}
+    \]
+    läßt sich zu einer holomorphen Funktion $\phi(s)$ auf die offene
+    Halbebene $\sigma > 0$ fortsetzen.
+  \end{enumerate}
+\end{prop}
+
+\begin{proof}
+  Die Behauptung (\ref{it:zeta1}) ist klar. Um (\ref{it:zeta2}) zu zeigen,
+  benutzen wir
+  \[
+    \frac 1 {s - 1}
+    = \int_1^\infty k^{-s} \, dk = \sum_{n = 1}^\infty \int_n^{n + 1} k^{-s} \, dk.
+  \]
+  Damit ist
+  \[
+    \zeta(s) - \frac 1 {s - 1} = 
+    \sum_{n = 1}^\infty\left(\frac 1 {n^s} - \int_n^{n + 1} k^{-s} \, dk\right)
+    = \sum_{n = 1}^\infty \int_n^{n + 1} (n^{-s} - k^{-s}) \, dk.
+  \]
+  
+  Die Summanden
+  \[
+    \phi_n(s) = \int_n^{n + 1} (n^{-s} - k^{-s}) \, dk
+  \]
+  sind für $\sigma > 0$ holomorph, so daß es nach dem Weierstraßschen Konvergenzsatz
+  zu zeigen reicht, daß
+  \[
+    \phi(s) = \sum_{n = 1}^\infty \phi_n(s)
+  \]
+  auf $\sigma > 0$ kompakt konvergiert: Nach dem Mittelwertsatz ist
+  \[
+    \begin{split}
+      |\phi_n(s)| & \leq \sup \{|n^{-s} - k^{-s}| \mid n \leq k \leq n + 1\} \\
+      &
+      \leq \sup \{|s k^{-(s + 1)}| \mid n \leq k \leq n + 1\} 
+      \leq \frac{|s|}{n^{\sigma + 1}}.
+    \end{split}
+  \]
+  Die Reihe $\sum_{n = 1}^\infty |\phi_n(s)|$
+  konvergiert damit gleichmäßig auf jeder offenen Halbebene $\sigma > \sigma_0 > 0$, 
+  so daß die Reihe $\phi(s)$ dort ebenfalls gleichmäßig konvergiert.
+\end{proof}
+
+\begin{cor}
+  Die Riemannsche Zeta-Funktion läßt sich zu einer meromorphen Funktion
+  $\zeta(s)$ auf die offene Halbebene $\sigma > 0$ fortsetzen und besitzt
+  dort einen einzigen Pol an der Stelle $1$. Dieser Pol ist einfach mit
+  Residuum $1$.
+  \qed
+\end{cor}
+
+\section{$L$-Funktionen}
+
+\begin{dfn}
+  Sei $\chi$ ein Dirichletscher Charakter modulo $q$, wie auch alle weiteren Charaktere im folgenden. Dann
+  ist die \emph{$L$-Funktion $L(s, \chi)$} auf der offenen Halbebene $\sigma > 1$ 
+  die dort absolut konvergente Dirichletsche Reihe 
+  \[
+    L(s, \chi) = \sum_{n = 1}^\infty \frac{\chi(n)}{n^s}.
+  \]
+\end{dfn}
+
+\begin{prop}
+  Für einen nicht trivialen Charakter $\chi \neq 1_q$ konvergiert die Reihe
+  $L(s, \chi)$
+  kompakt auf der offenen Halbebene $\sigma > 0$ und absolut auf der offenen Halbebene
+  $\sigma > 1$. Dort gilt\footnote{Die Produktdarstellung gilt auch für den
+  trivialen Charakter $\chi = 1_q$.}
+  \[
+    L(s, \chi) = \prod_p \frac 1 {1 - \chi(p) p^{-s}}.
+  \]
+\end{prop}
+
+\begin{proof}
+  Die Aussage für $\sigma > 1$ folgt aus Lemma~\ref{lem:multiplicative} und
+  Beispiel~\ref{xca:multiplicative}.
+  
+  Es bleibt die Konvergenz für $\sigma > 0$ zu zeigen. Nach Proposition~\ref{prop:convergence_zero}
+  reicht es zu zeigen, daß die Partialsummen $\sum_{n = u}^v \chi(n)$ beschränkt sind.
+  Dies folgt aus der Tatsache, daß $\chi$ als nicht trivialer Charakter die Relation
+  $\chi(0) + \dotsb + \chi(q - 1) = 0$ erfüllt und $q$-periodisch ist.
+\end{proof}
+
+\begin{prop}
+  Die $L$-Reihe zum trivialen Charakter erfüllt
+  \[
+    L(s, 1_q) = \zeta(s) \prod_{p \mid q} (1 - p^{-s}).
+  \]
+  Insbesondere läßt sich $L(s, 1_q)$ analytisch auf die offene Halbebene $\sigma > 0$
+  mit einem einzigen Pol bei $s = 1$ fortsetzen. Der Pol ist einfach hat Residuum $\frac{\totient(q)}{q}$;
+  insbesondere gilt also $\totient(q) = q \prod_{p \mid q} (1 - p^{-1})$. 
+\end{prop}
+
+\begin{proof}
+  Die Aussagen über die analytische Fortsetzbarkeit, die Anzahl der Polstellen und ihre Ordnungen
+  folgen aus den entsprechenden Aussagen für die Riemannsche Zeta-Funktion. Es
+  bleibt, den Wert des Residuums zu berechnen:
+  \[
+    \begin{split}
+      \Res_{s = 1} L(s, 1_q)
+      & = \Res_{s = 1} \sum_\chi L(s, \chi) \\
+      & = \frac{\totient(q)} q + \Res_{s = 1} \left(\sum_\chi L(s, \chi) - \frac{\totient(q)} q \zeta(s)\right) \\
+      & = \frac{\totient(q)} q + \Res_{s = 1} \sum_{n = 1}^\infty \frac{\sum_\chi \chi(n) - \frac {\phi(q)} q}{n^s} \\
+      & = \frac{\totient(q)} q.
+    \end{split}
+  \]
+  Die letzte Gleichheit folgt aus der Tatsache, daß sich die Reihe
+  $\frac{\sum_\chi \chi(n) - \frac {\phi(q)} q} {n^s}$ nach Proposition~\ref{prop:convergence_zero} zu
+  einer holomorphen Funktion auf $\sigma > 0$ fortsetzen läßt.
+\end{proof}
+
+\section{Die Dedekindsche Zeta-Funktion}
+
+\begin{dfn}
+  Die \emph{Dedekindsche Zeta-Funktion (des $q$-ten Kreisteilungskörpers)} ist
+  \[
+    \zeta_q(s) = \prod_{\chi} L(s, \chi),
+  \]
+  wobei $\chi$ hier wie auch im folgenden alle Charaktere modulo $q$ durchläuft.
+\end{dfn}
+
+\begin{prop}
+  \label{prop:zeta_product}
+  Sei $p$ ein Primzahl, die teilerfremd zu $q$ ist.
+  Wir bezeichnen mit $f_p$ die kleinste
+  ganze Zahl $f > 0$ mit $p^f \equiv 1$ (modulo $q$)\footnote{Die Zahl $f_p$ ist die
+  Ordnung von $p$ in $\mathbf Z/(q)$.} und setzen
+  $g_p \coloneqq \frac{\totient(q)}{f_p}$\footnote{Die Zahl $g_p$ ist der Index
+  der von $p$ erzeugten Untergruppe in $\mathbf Z/(q)$.},
+  Auf der offenen Halbebene $\sigma > 1$ gilt dann die Produktdarstellung
+  \[
+    \zeta_q(s) = \prod_{p \nmid q} \frac 1 {(1 - p^{- f_p s})^{g_p}}
+  \]
+  und die Dedekindsche Zeta-Funktion wird dort durch eine gewöhnliche
+  Dirichletsche Reihe mit ganzzahligen Koeffizienten $a_n \ge 0$ dargestellt. 
+  Genauer dominieren ihre Koeffizienten die der Reihe $L(\totient(q) s, 1)$.
+\end{prop}
+
+\begin{proof}
+  Nach Proposition~\ref{prop:character} ist
+  \[
+    \zeta_q(s) = \prod_\chi \prod_p \frac 1 {1 - \chi(p) p^s}
+    = \prod_{p \nmid q} \prod_\chi \frac 1 {1 - \chi(p) p^s}
+    = \prod_{p \nmid q} \frac 1 {(1 - p^{- f_p s})^{g_p}},
+  \]
+  womit die erste Behauptung bewiesen ist.
+  Daraus folgt
+  \[
+    \zeta_q(s) = \prod_{p \nmid q} \left(\sum_{m = 0}^\infty p^{-m f_p s}\right)^{g_p}.
+  \]
+  Entwickeln wir die rechte Seite in eine Dirichletsche Reihe sehen wir, daß ihre
+  Koeffizienten wegen $f(p) g(p) = \totient(p)$ die Koeffizienten der Reihe
+  \[
+    \prod_{p \nmid q} \sum_{m = 0}^\infty p^{-m \totient(q) s}
+    = \sum_{(n, q) = 1} \frac 1 {n^{\totient(q) s}}
+    = L(\totient(q) s, 1_q)
+  \]
+  dominieren.
+\end{proof}
+
+\begin{thm}
+  Für jeden nicht trivialen Charakter $\chi \neq 1_q$ gilt $L(1, \chi) \neq 0$.
+\end{thm}
+
+\begin{proof}
+  Angenommen $L(1, \chi) = 0$ für einen nicht trivialen Charakter. Dann wäre
+  $\zeta_q(s)$ holomorph bei $1$ und damit auf der ganzen offenen Halbebene
+  $\sigma > 0$. Da die Koeffizienten der Dirichletschen Reihe von
+  $\zeta_q(s)$ alle nicht negativ sind, konvergiert nach Proposition~\ref{prop:positivity}
+  die Reihe dann auch für alle $\sigma > 0$. Nach dem Zusatz in Proposition~\ref{prop:zeta_product}
+  konvergiert dann auch die Dirichletsche Reihe zu $L(\totient(q) s, 1_q)$ etwa 
+  an der Stelle $s = \frac 1 {\totient(q)} < 1$. Das ist aber absurd, denn
+  $L(s, 1_q)$ hat bei $1$ einen Pol, das heißt $\frac 1 {\totient(q)}$ ist kleiner
+  als die Konvergenzabzisse. 
+\end{proof}
+
+\begin{cor}
+  Die Dedekindsche Zeta-Funktion $\zeta_q$ hat einen einfachen Pol bei $1$.
+\end{cor}
+
+\begin{proof}
+  Wir wissen schon, daß $L(s, 1_q)$ einen einfachen Pol bei $s = 1$ hat. Damit
+  folgt die Behauptung aus der eben bewiesenen Tatsache, daß die übrigen
+  Faktoren $L(s, \chi)$, $\chi \neq 1_q$ bei $s = 1$ nicht verschwinden.
+\end{proof}
+
+\chapter{Der Primzahlsatz}
+
+% TODO: log(x) 
+
+\section{Vorbereitungen}
+
+\begin{dfn}
+  Die auf $x \ge 0$ definierte Funktion
+  \[
+    \psi(x) \coloneqq \sum_{n \leq x} \Lambda(n) = \sum_{p^m \leq x} \log p,
+  \]
+  heißt die \emph{(zweite) Tschebyschowsche Funktion}.
+\end{dfn}
+
+\begin{prop}
+  Für $x \ge 0$ gilt die Abschätzung
+  \[
+    \psi(x) \leq 12 (\log 2) x.
+  \]
+\end{prop}
+
+\begin{proof}
+  Wir setzen $\theta(x) \coloneqq \sum_{p \leq x} \log p$. Dann gilt
+  \[
+    \psi(x) = \sum_{k = 1}^\infty \theta(x^{\frac 1 k})
+    = \sum_{k \leq \log_2 x} \theta(x^{\frac 1 k}).
+  \]
+  Für eine natürliche Zahl $n$ gilt
+  \[
+    2^{2n} = \sum_{k = 0}^{2n} \binom{2n} k > \binom{2n} n
+    \ge \prod_{n < p \leq 2n} p,
+  \]
+  also
+  \[
+    \theta(2n) - \theta(n) < 2n \log 2.
+  \]
+  Aufsummieren über $n = 1$, $2$, $4$, \dots, $2^{m - 1}$ liefert
+  \[
+    \theta(2^m) < 2 \, (2^m - 1) \log 2 < 2^{m + 1} \log 2
+  \]
+  wegen $\theta(1) = 0$. 
+  Für $2^{m - 1} < x \leq 2^m$ gilt
+  \[
+    \theta(x) \leq \theta(2^m) < 2^{m + 1} \log 2 = 4 \cdot 2^{m - 1} \log 2
+    < 4 (\log 2) x
+  \]
+  und damit $\theta(x) < 4 (\log 2)$ für alle $x$.
+  Damit ist
+  \[
+    \psi(x) < 4 (\log 2) x \sum_{k \leq \log_2 x} x^{\frac 1 k - 1}
+    < 4 (\log 2) x (1 + x^{- \frac 1 2} \log_2 x)
+    < 12 (\log 2) x.
+    \qedhere
+  \]
+\end{proof}
+
+\begin{cor}
+  \label{cor:chebychev}
+  Sei $a$ eine ganze Zahl modulo $q$. Definieren wir dann
+  \[
+    \psi_{q, a}(x) \coloneqq \totient(q) \sum_{p^m \leq x, p^m \equiv a} \log p
+    = \totient(q) \sum_{n \leq x, n \equiv a} \Lambda(n)
+  \]
+  für $x \ge 0$, so gilt
+  \[
+    \psi_{q, a}(x) < 12 \log(2) \totient(q) x.
+    \pushQED{\qed}
+    \qedhere
+    \popQED
+  \]
+\end{cor}
+
+\begin{lem}
+  \label{lem:chebychev}
+  Sei $a$ eine ganze Zahl modulo $q$.
+  Bezeichnen wir dann mit $\pi_{q, a}(x)$ die Anzahl der Primzahlen $p$ mit $p \leq x$ und
+  $p \equiv a \pmod q$, so gilt
+  \begin{align*}
+    \liminf_{x \to \infty} \frac{\psi_{q, a}(x)} x & = \liminf_{x \to \infty} \frac{\totient(q) \log(x) \pi_{q, a}(x)} x \\
+    \intertext{und}
+    \limsup_{x \to \infty} \frac{\psi_{q, a}(x)} x & = \limsup_{x \to \infty} \frac{\totient(q) \log(x) \pi_{q, a}(x)} x.
+  \end{align*}
+\end{lem}
+
+\begin{proof}
+  Zunächst ist
+  \[
+    \begin{split}
+      \psi_{q, a}(x) & = \totient(q) \sum_{p^m \leq x, p^m \equiv a} \log p
+      \\
+      & = \totient(q) \Biggl( \sum_{p \leq x, p \equiv a} \log p
+      + \sum_{p^m \leq x, m \geq 2} \log p \Biggr)
+      \\
+      & \leq \totient(q) \left((\log x) \pi_{q, a}(x) + \frac 1 2 (\log x) (\log_2 x) x^{\frac 1 2}\right).
+    \end{split}
+  \]
+  Daraus folgt wegen $\lim_{x \to \infty} (\log x)^2 x^{-\frac 1 2} = 0$, daß
+  \begin{align*}
+    \liminf_{x \to \infty} \frac{\psi_{q, a}(x)} x & \leq \liminf_{x \to \infty} \frac{\totient(q) \log(x) \pi_{q, a}(x)} x \\
+    \intertext{und}
+    \limsup_{x \to \infty} \frac{\psi_{q, a}(x)} x & \leq \limsup_{x \to \infty} \frac{\totient(q) \log(x) \pi_{q, a}(x)} x.
+  \end{align*}
+  
+  Für $\epsilon > 0$ gilt andererseits
+  \[
+    \begin{split}
+      \psi_{q, a}(x)
+      & = \totient(q) \sum_{p^m \leq x, p^m \equiv a} \log
+      \\
+      & \ge \totient(q) \sum_{x^{1 - \epsilon} \leq p \leq x, p \equiv a} \log p
+      \\
+      & \ge \totient(q) \sum_{x^{1 - \epsilon} \leq p \leq x, p \equiv a} \log(x^{1 - \epsilon})
+      \\
+      & \ge \totient(q) (1 - \epsilon) \log (x) (\pi_{q, a}(x) - x^{1 - \epsilon}),
+    \end{split}
+  \]
+  also
+  \[
+    \frac{\psi_{q, a}(x)} x \ge (1 - \epsilon) \totient(q) \left(\frac{\log(x) \pi_{q, a}(x)} x - \frac{\log x}{x^{\epsilon}}\right).
+  \]
+  Da $\lim_{x \to \infty} \frac{\log x}{x^\epsilon} = 0$, haben wir
+  \begin{align*}
+    \liminf_{x \to \infty} \frac{\psi_{q, a}(x)} x & \geq (1 - \epsilon) \liminf_{x \to \infty} \frac{\totient(q) \log(x) \pi_{q, a}(x)} x \\
+    \intertext{und}
+    \limsup_{x \to \infty} \frac{\psi_{q, a}(x)} x & \geq (1 - \epsilon) \limsup_{x \to \infty} \frac{\totient(q) \log(x) \pi_{q, a}(x)} x
+  \end{align*}
+  für alle $\epsilon > 0$, so daß wir formal $\epsilon = 0$ setzen können.
+\end{proof}
+
+\section{Nullstellen der Dedekindschen Zeta-Funk\-tion}
+
+\begin{prop}
+  Die Dedekindsche Zeta-Funktion $\zeta_q(s)$ hat auf der Halbebene $\{s \mid \sigma \ge 1\}$
+  keine Nullstellen\footnote{Damit hat insbesondere die Riemannsche Zeta-Funktion
+  $\zeta(s) = \zeta_1(s)$ keine Nullstellen auf $\sigma \ge 1$.}. 
+\end{prop}
+
+\begin{proof}
+  Aufgrund der Produktdarstellung von $\zeta_q(s)$ für $\sigma > 1$ reicht es, nur
+  Nullstellen mit $\sigma = 1$ zu betrachten. Wir wissen schon, daß $\zeta_q$ bei $s = 1$
+  einen Pol, dort also insbesondere keine Nullstelle hat. Weitere Pole gibt es für $\sigma = 1$ nicht.
+  Sei $\mu \ge 0$ die Nullstellenordnung von $\zeta_q(s)$ an einer Stelle $s = 1 + i t$ mit $t \neq 0$.
+  Wir müssen $\mu = 0$ zeigen. Dazu betrachten wir außerdem die Nullstellenordnung $\nu$
+  von $\zeta_q(s)$ an $s = 1 + 2 i t$.
+  Da das komplex Konjugierte eines Charakters wieder ein Charakter ist, ist
+  \[
+    \overline{\zeta_q(s)} = \prod_\chi \overline{L(s, \chi)} = \prod_\chi L(\overline s, \overline \chi)
+    = \zeta_q(\overline s).
+  \]
+  Damit hat $\zeta_q$ an $s = 1 - i t$ ebenfalls eine Nullstelle der Ordnung $\mu$ und an
+  $s = 1 - 2 i t$ eine Nullstelle der Ordnung $\nu$.
+  Wir setzen als nächstes
+  \[
+    \begin{split}
+      f(s) & \coloneqq \prod_{r = -2}^2 \zeta_q(1 + r i t + s)^{\binom{4}{2 + r}} \\
+      & = \zeta_q(1 - 2 i r t + s) \zeta_q(1 - i r t + s)^4 \zeta_q(1 + s)^6 \zeta_q(1 + s + i t)^4 \zeta_q(1 + s + 2 i t).
+    \end{split}
+  \]
+  Die Polstellenordnung von $f(s)$ an $0$ ist $k \coloneqq 6 - 8 \mu - 2 \nu$. Wir werden
+  $k \ge 0$ zeigen, denn dann folgt $\mu$ = 0, und wir sind fertig.
+  
+  Nach dem bekannten Zusammenhang der Polstellenordnung und der logarithmischen
+  Ableitung für meromorphe Funktionen hat
+  \[
+    g(s) = - \frac{f'(s)}{f(s)} = - \frac{d}{ds} \log f(s) =
+    - \sum_{r = -2}^2 \binom{4}{2 + r} \frac d{ds} \log \zeta_q(1 + r it + s)
+  \]
+  bei $0$ eine einfache Polstelle mit $\Res_0 g(s) = k$, es ist also $\Res_0 g(s) \ge 0$ zu zeigen.
+  
+  Auf der offenen Halbebene $\sigma > 1$ gilt
+  \[
+    - \frac{d}{ds} \log \zeta_q(s) = \sum_{n = 1}^\infty \sum_\chi \frac{\chi(n) \Lambda(n)}{n^s}
+    = \totient(q) \sum_{n \equiv 1} \frac{\Lambda(n)}{n^s}
+  \]
+  nach Proposition~\ref{prop:multiplicative}. Damit gilt
+  \[
+  	\begin{split}
+		  \Res_{s = 0} g(s) & = - \lim_{\epsilon \to 0} \epsilon \cdot \sum_{r = -2}^2 \binom{4}{2 + r} \left.\frac d {ds}\right|_{s = \epsilon}
+		 	\log \zeta_q(1 + r i t + s) 
+  		\\
+  		& = \lim_{\epsilon \to 0} \epsilon \cdot \totient(q) \sum_{r = -2}^2 \binom{4} {2 + r} \sum_{n \equiv 1} \frac{\Lambda(n)} {n^{1 + r i t + \epsilon}}
+  		\\
+  		& = \lim_{\epsilon \to 0} \epsilon \cdot \totient(q) \sum_{n \equiv 1} \frac{\Lambda(n)}{n^{1 + \epsilon}} (n^{\frac 1 2 i t} + n^{- \frac 1 2 i t})^4
+  		\\
+  		& \ge 0.
+  		\qedhere
+  	\end{split}
+  \]  
+\end{proof}
+
+\begin{cor}
+	\label{cor:residue}
+	Sei $a \in \mathbf Z$ teilerfremd zu $q$. Die Funktion
+	\[
+		\frac d {ds} \log \zeta_{q, a}(s) \coloneqq
+		\sum_\chi \chi(a)^{-1} \frac d {ds} \log L(s, \chi)
+	\]
+	ist auf $\sigma > 0$ meromorph. Auf $\{s \mid \sigma = 1\}$ hat sie
+	genau eine Polstelle, und zwar eine erster Ordnung bei $s = 1$. Es gilt
+	\[
+		\Res_{s = 1} \frac d{ds} \log\zeta_{q, a}(s) = -1.
+		\pushQED{\qed}
+		\qedhere
+		\popQED
+	\]
+\end{cor}
+
+\section{Eine Armeleuteversion des Ikehara--Wiener\-schen Satzes}
+
+\begin{thm}
+  \label{thm:analytic}
+  Sei $f(t)$ eine auf $t \ge 0$ beschränkte, dort lokal $L^1$-integrierbare
+  Funk\-tion. Läßt sich die für $\sigma > 0$ definierte Funktion $g(s) = \int_0^\infty f(t) e^{-st} \, dt$
+  holomorph über $\sigma = 0$ fortsetzen, so gilt
+  \[
+    \int_0^\infty f(t) \, dt = g(0),
+  \]
+  insbesondere existiert also das Integral.
+\end{thm}
+
+\begin{proof}
+  Für $T > 0$ setzen wir $g_T(s) \coloneqq \int_0^T f(t) e^{-st} \, dt$.
+  Offensichtlich müssen wir $\lim_{T \to \infty} g_T(0) = g(0)$ zeigen.
+  
+  Sei $R \gg 0$ gegeben. Weiter sei $\gamma$ ein Zykel, der die Menge
+  \[
+    A = \{s \mid |s| < R, \sigma > - \delta\}
+  \]
+  umläuft, wobei $0 < \delta \ll 1$, so
+  daß wir annehmen können, daß $g(s)$ holomorph auf einer Umgebung von $A$ ist. 
+  Nach dem Cauchyschen Integralsatz ist
+  \[
+    \begin{split}
+      g(0) - g_T(0)
+      = (g(0) - g_T(0)) \cdot \left. e^{sT} \cdot \left(1 + \frac {s^2}{R^2}\right)\right|_{s = 0}
+      \\
+      = \frac 1 {2 \pi i} \oint_\gamma (g(s) - g_T(s)) \cdot e^{sT} \cdot \left(1 + \frac {s^2}{R^2}\right) \frac {ds}{s}.
+    \end{split}
+  \] 
+   
+  Sei $\gamma_1$ derjenige Teil des Zykels $\gamma$, der in der Halbebene $\sigma \ge 0$
+  läuft, und $\gamma_2$ derjenige Teil des Zykels, der in der Halbebene $\sigma \le 0$
+  läuft. Weiter sei $\gamma_3$ der Halbkreis $\gamma_3(\phi) = R \, e^{i \phi}$, $\frac \pi 2 \leq \phi \leq \frac {3 \pi} 2$. 
+  Damit gilt
+  \[
+    \begin{split}
+      |g(0) - g_T(0)| & \leq \frac 1 {2\pi} \left|
+        \int_{\gamma_1} (g(s) - g_T(s)) e^{sT} \left(1 + \frac {s^2}{R^2}\right) \frac {ds}{s}\right|
+        \\
+        & + \frac 1 {2\pi} \left|
+        \int_{\gamma_2} g(s) e^{sT} \left(1 + \frac {s^2}{R^2}\right) \frac {ds}{s}\right|
+        \\
+        & + \frac 1 {2\pi} \left|
+        \int_{\gamma_2} g_T(s) e^{sT} \left(1 + \frac {s^2}{R^2}\right) \frac {ds}{s}\right|.
+    \end{split}
+  \]
+  
+  Auf der Halbebene $\sigma > 0$ gilt
+  \[
+    |g(s) - g_T(s)| = \left|\int_T^\infty f(t) e^{-st} \, dt\right|
+    \leq B \int_T^\infty |e^{-st}| \, dt = \frac {B e^{-\sigma T}} \sigma,
+  \]
+  wobei $B \coloneqq \sup_{t \ge 0} |f(t)|$.
+  Analog ist
+  \[
+    |g_T(s)| = \left| \int_0^T f(t) e^{-st} \, dt\right| \leq B \int_{-\infty}^T |e^{-st}| \, dt
+    = B \frac{e^{-\sigma t}} {|\sigma|}
+  \]
+  auf der Halbebene $\sigma < 0$.
+  Auf der Spur von $\gamma_1$ und $\gamma_3$ gilt $\frac R s + \frac s R =
+  2 \frac \sigma R$, also
+  \[
+    \left|e^{sT} \left(1 + \frac {s^2}{R^2}\right) \frac 1 s\right|
+    = \frac{e^{\sigma T}} R \left|\frac R s + \frac s R\right|
+    = 2 e^{\sigma T} \frac{|\sigma|} {R^2}
+  \]
+  Damit gilt
+  \[
+    \frac 1 {2\pi} \left|
+        \int_{\gamma_1} (g(s) - g_T(s)) \cdot e^{sT} \cdot \left(1 + \frac {s^2}{R^2}\right) \frac {ds}{s}\right|
+    \leq \frac B R
+  \]
+  und
+  \[
+    \frac 1 {2\pi} \left|
+    \int_{\gamma_2} g_T(s) e^{sT} \left(1 + \frac {s^2}{R^2}\right) \frac {ds}{s}\right|
+    = \frac 1 {2\pi} \left|
+    \int_{\gamma_3} g_T(s) e^{sT} \left(1 + \frac {s^2}{R^2}\right) \frac {ds}{s}\right|
+    \leq \frac B R,
+  \]
+  wobei das Gleichheitszeiten aus dem Cauchyschen Integralsatz folgt, denn $g_T(s)$ ist
+  eine ganze Funktion.
+  Es folgt
+  \[
+    |g(0) - g_T(0)| \leq \frac{2 B}{R} +
+      \frac 1 {2\pi} \left|
+      \int_{\gamma_2} \cdot g(s) \cdot e^{sT} \left(1 + \frac {s^2}{R^2}\right) \frac {ds}{s}\right|.
+  \]
+  Es ist
+  \[
+    \lim_{T \to \infty} \int_{\gamma_2} g(s) \cdot e^{sT} \cdot \left(1 + \frac {s^2}{R^2}\right) \frac {ds}{s} = 0,
+  \]
+  also
+  \[
+    \limsup_{T \to \infty} |g(0) - g_T(0)| \leq \frac {2 B} R
+  \]
+  für alle $R \gg 0$.
+  Es folgt $\lim_{T \to \infty} |g(0) - g_T(0)| = 0$. 
+\end{proof}
+
+\begin{cor}[Armeleuteversion des Ikehara--Wienerschen Satzes] 
+  \label{cor:wiener}
+  Sei $f(x)$ eine für $x \ge 1$ definierte, monoton wachsende Funktion.
+  Es existiere eine Konstante $C$ mit $0 \leq f(x) \leq C x$, so daß
+  die \emph{Mellinsche Transformierte} 
+  \[
+    g(s) = s \int_1^\infty f(x) x^{-s - 1} \, dx
+  \]
+  eine holomorphe Funktion auf der Halbebene $\sigma > 1$ definiert. Besitzt
+  $g(s)$ dann eine meromorphe Fortsetzung auf eine offene Umgebung von
+  $\{s \mid \sigma \ge 1\}$ mit
+  höchstens einer Polstelle, und zwar bei $s = 1$ von höchstens erster Ordnung,
+  so gilt
+  \[
+    \Res_{s = 1} g(s) = \lim_{x \to \infty} \frac{f(x)}{x}.
+  \]
+\end{cor}
+
+\begin{proof}
+  Sei $c = \Res_{s = 1} g(s)$. Dann besitzt
+  \[
+    g(s) - \frac c{s - 1}
+  \]
+  nach Voraussetzung
+  eine holomorphe Fortsetzung auf eine Umgebung von
+  \[
+    \{s \mid \sigma \ge 1\}.
+  \]
+  Außerdem sehen wir wegen $\lim_{\epsilon \to 0} \, (1 + \epsilon) g(1 + \epsilon) \ge 0$, 
+  daß $c \ge 0$.
+  
+  Wir definieren
+  \[
+    F(t) \coloneqq e^{-t} f(e^t) - c.
+  \]
+  mit $t \ge 1$. Dann ist $F(t)$ nach Voraussetzung beschränkt und
+  lokal $L^1$-integrier\-bar, so daß die
+  \emph{Laplacesche Transformierte}
+  \[
+    G(s) = \int_0^\infty F(t) e^{-s t} \, dt
+  \]
+  auf der offenen Halbebene $\sigma > 0$ eine holomorphe Funktion definiert.
+  Die Substitution $x = e^t$ liefert
+  \[
+    G(s) = \int_1^\infty f(x) x^{-s - 2} \, dx - \frac c s
+    = \frac{1}{s + 1}\left(g(s + 1) - \frac c s - c\right),
+  \] 
+  so daß nach Voraussetzung die Funktion $G(s)$ eine analytische Fortsetzung
+  auf eine offene Umgebung von $\{s \mid \sigma \ge 0\}$ besitzt. Damit können
+  wir Satz \ref{thm:analytic} auf die Funktion $F(t)$ anwenden und erhalten, daß
+  das Integral
+  \[
+    \int_0^\infty F(t) \, dt = \int_0^\infty (e^{-t} f(e^t) - c) \, dt
+    = \int_1^\infty \frac{f(x) - cx}{x^2} \, dx
+  \]
+  existiert. Wir wollen daraus folgern, daß $\lim_{x \to \infty} \frac{f(x)}{x} = c$.
+  
+  Angenommen $\limsup_{x \to \infty} \frac{f(x)}{x} > c$. Dann existiert ein
+  $\delta > 0$, so daß
+  \[
+    f(y) > (c + 2 \delta) y
+  \]
+  für beliebig große $y$ gilt. Für $y < x < \rho y$ mit $\rho \coloneqq \frac{c + 2\delta}{c + \delta} > 1$
+  folgt dann
+  \[
+    f(x) > (c + 2 \delta) y > (c + \delta) x.
+  \]
+  Dann ist aber
+  \[
+    \int_y^{\rho y} \frac{f(x) - cx}{x^2} \, dx > \int_y^{\rho y} \frac \delta x \, dx
+    = \delta \, \log \rho
+  \]
+  für beliebig große $y$,
+  und die rechte Seite ist eine positive Konstante. Damit kann das Integral
+  $\int_1^\infty \frac{f(x) - cx}{x^2} \, dx$ nicht existieren, ein Widerspruch.
+  Damit ist also $\limsup_{x \to \infty} \frac{f(x)}{x} \leq c$.
+  
+  Nehmen wir andererseits $\liminf_{x \to \infty} \frac{f(x)}{x} < c$ an, insbesondere
+  also $c > 0$, so
+  können wir dies analog zu einem Widerspruch führen. In diesem Falle existiert
+  ein $\delta > 0$, so daß
+  \[
+    f(y) < (c - 2 \delta) y
+  \]
+  für beliebig große $y$, wobei wir $\delta$ klein genug wählen, so daß
+  noch $c - 2 \delta > 0$. Für $\theta y < x < y$ mit $\theta \coloneqq \frac{c - 2 \delta}{c - \delta} > 1$
+  folgt dann
+  \[
+    f(x) < (c - 2 \delta) y < (c - \delta) x
+  \] 
+  Dann ist aber
+  \[
+    \int_{\theta y}^y \frac{f(x) - cx}{x^2} \, dx < - \int_{\theta y}^y \frac \delta x \, dx
+    = \delta \, \log \theta
+  \] 
+  für beliebig große $y$,
+  und die rechte Seite ist eine negative Konstante. Damit kann das Integral
+  $\int_1^\infty \frac{f(x) - cx}{x^2} \, dx$ wiederum nicht existieren, ein Widerspruch.
+  Damit ist also $\liminf_{x \to \infty} \frac{f(x)}{x} \geq c$.
+  
+  Damit müssen also Limes inferior und Limes superior übereinstimmen, und wir
+  haben $\lim_{x \to \infty} \frac{f(x)} x = c$.
+\end{proof}
+
+\section{Der Primzahlsatz}
+
+\begin{prop}
+	Sei $a \in \mathbf Z$ zu $q$ teilerfremd. Auf der offenen Halbebene $\sigma > 1$ gilt dann
+	\[
+		- \frac{d}{ds} \log \zeta_{q, a}(s)
+		= s \int_1^\infty \frac{\psi_{q, a}(x)}{x^{s + 1}} \, dx.
+	\]
+\end{prop}
+
+\begin{proof}
+  Es ist
+  \[
+    \begin{split}
+      - \frac d{ds} \log \zeta_{q, a}(s)
+      & = \sum_\chi \chi(a)^{-1} \sum_{n = 1}^\infty \frac{\chi(n) \Lambda(n)}{n^s} \\
+      & = \sum_{n = 1} \left(\sum_{\chi} \chi(a^{-1} n)\right) \frac{\Lambda(n)}{n^s} \\
+      & = \totient(q) \sum_{n \equiv a} \frac{\Lambda(n)}{n^s} \\
+      & = \totient(q) \sum_{n \equiv a} s \int_n^\infty \frac{\Lambda(n)}{x^{s + 1}} \, dx \\
+      & = \totient(q) \cdot s \cdot \sum_{n \equiv a} \sum_{k = n}^\infty \int_k^{k + 1} \frac{\Lambda(n)}{x^{s + 1}} \, dx \\
+      & = s \cdot \sum_{k = 1}^\infty \int_k^{k + 1} \sum_{n \equiv a, n \leq k} \totient(q) \cdot \frac{\Lambda(n)}{x^{s + 1}} \, dx \\
+      & = s \int_1^\infty \frac{\psi_{q, a}(x)}{x^{s + 1}} \, dx.
+      \qedhere
+    \end{split} 
+  \]
+\end{proof}
+
+\begin{cor}
+	\label{cor:convergence}
+	Es ist
+	\[
+		\lim_{x \to \infty} \frac{\psi_{q, a}(x)}{x} = 1.
+	\] 
+\end{cor}
+
+\begin{proof}
+	Wegen Folgerung~\ref{cor:chebychev} und Folgerung~\ref{cor:residue} können wir Folgerung~\ref{cor:wiener}
+	anwenden.
+\end{proof}
+
+\begin{thm}
+  Sei $q \ge 1$ eine natürliche Zahl, und sei $a \in \mathbf Z$ zu $q$ teilerfremd.
+  Bezeichnen wir mit $\pi_{q, a}(x)$ die Anzahl der Primzahlen $p$ mit $p \leq x$ und
+  $p \equiv a$ modulo $q$, so gilt
+  \[
+    \pi_{q, a}(x) \sim \frac 1 {\totient(q)} \frac x {\log x}
+  \]
+  für $x \to \infty$, das heißt
+  \[
+    \lim_{x \to \infty} \pi_{q, a}(x) \left(\frac 1 {\totient(q)} \frac x {\log x}\right)^{-1} = 1.
+  \]
+\end{thm}
+
+\begin{proof}
+  Wegen Lemma~\ref{lem:chebychev} ist dies nur eine Umformulierung von
+  Folgerung~\ref{cor:convergence}.
+\end{proof}
+
+\begin{cor}[Der Primzahlsatz]
+  Bezeichnen wir mit $\pi(x)$ die Anzahl der Primzahlen $p$ mit $p \leq x$, so
+  gilt
+  \[
+    \pi(x) \sim \frac x {\log x}
+  \]
+  für $x \to \infty$, das heißt
+  \[
+    \lim_{x \to \infty} \pi(x) \left(\frac x {\log x}\right)^{-1} = 1.
+    \pushQED\qed
+    \qedhere
+    \popQED
+  \]
+\end{cor}
+
+\begin{cor}[Dirichletscher Primzahlsatz]
+  Sei $q \ge 1$ eine natürliche Zahl und $a \in \mathbf Z$ zu $q$ teilerfremd.
+  Dann gibt es in der \emph{arithmetischen Progression}
+  \[
+    a, a + q, a + 2 q, a + 3 q, \dots
+  \]
+  unendlich viele Primzahlen.
+  \qed
+\end{cor}
+
+\chapter{Die Gamma-Funktion}
+
+\section{Der Wielandtsche Satz}
+
+\begin{dfn}
+  Die \emph{Gamma-Funktion $\Gamma(s)$} ist auf der offenen Halbebene
+  $\sigma > 0$ das dort absolut kompakt konvergente Integral
+  \[
+    \Gamma(s) \coloneqq \int_0^\infty t^{s - 1} e^{-t} \, dt.
+  \]
+\end{dfn}
+
+\begin{prop}
+  Für die Gamma-Funktion gilt $\Gamma(1) = 1$ und $\Gamma(s + 1) = s \, \Gamma(s)$
+  auf der offenen Halbebene $\sigma > 0$.
+\end{prop}
+
+\begin{proof}
+  Es ist $\Gamma(1) = \int_0^\infty e^{-t} \, dt = 1$. Mittels partieller
+  Integration zeigt sich weiter
+  \[
+    \Gamma(s + 1) = \int_0^\infty t^s e^{-t} \, dt
+    = s \int_0^\infty t^{s - 1} e^{-t} \, dt = s \Gamma(s).
+    \qedhere
+  \]
+\end{proof}
+
+\begin{cor}
+  Für jede natürliche Zahl $n$ gilt $n! = \Gamma(n + 1)$.
+  \qed
+\end{cor}
+
+\begin{thm}
+  \label{thm:gamma}
+  Die Gamma-Funktion läßt sich zu einer meromorphen Funktion $\Gamma(s)$
+  auf $\mathbf C$ fortsetzen. Sie genügt dort der Funktionalgleichung
+  $\Gamma(s + 1) = s \, \Gamma(s)$ und ist auf jedem Vertikalstreifen
+  $\{s \mid \sigma_0 \leq \sigma < \sigma_1\}$ mit $0 < \sigma_0 < \sigma_1$
+  beschränkt.
+  
+  Sie hat Polstellen genau bei $s = 0$, $-1$, $-2$,
+  \dots. Alle Polstellen sind einfach, und für alle $n \in \mathbf N_0$ gilt
+  \[
+    \Res_{s = -n} \Gamma(s) = \frac{(-1)^n}{n!}.
+  \]
+\end{thm}
+
+\begin{proof}
+  Für jedes $n \in \mathbf N_0$ gilt
+  \[
+    \Gamma(s) = \frac{\Gamma(s + n + 1)}{s \cdot (s + 1) \dotsm (s + n)}
+  \]
+  zunächst auf $\sigma > 0$. Die rechte Seite ist aber auch für $\sigma > - (n + 1)$
+  eine meromorphe Funktion, wenn wir $\Gamma(s)$ zunächst nur für $\sigma > 0$
+  definiert haben. Damit stellt die rechte Seite eine meromorphe Fortsetzung
+  da. Im Grenzwert $n \to \infty$ erhalten wir eine meromorphe Fortsetzung auf
+  die ganze komplexe Ebene $\mathbf C$ mit den behaupteten einfachen Polstellen.
+  
+  Die Behauptung über die Residuen folgt aus
+  \[
+    \begin{split}
+      \Res_{s = -n} \Gamma(s)
+      & = \Res_{s = -n} \frac{\Gamma(s + n + 1)}{s \cdot (s + 1) \dotsm (s + n)}
+      \\
+      &= \frac{\Gamma(1)}{(-n) \cdot (-n + 1) \dotsm (-1)} \Res_{s = -n} \frac 1 {s + n}
+      = \frac{(-1)^n}{n!}.
+    \end{split}
+  \]
+  
+  Es bleibt, die Beschränktheit in den Vertikalstreifen zu zeigen. Dies folgt
+  aus
+  \[
+    |\Gamma(s)| \leq \int_0^\infty |t^{s - 1} e^{-t}| \, dt =  \int_0^\infty t^{\sigma - 1} e^{-t} \, dt
+    = \Gamma(\sigma)
+  \]
+  für $\sigma > 0$ und der Tatsache, daß die stetige Funktion $\Gamma(\sigma)$ auf
+  jedem Kompaktum in $\mathbf R_+$ beschränkt ist.
+\end{proof}
+
+\begin{thm}[Wielandtscher Satz]
+  Sei $G$ ein Gebiet, welches den Vertikalstreifen $\{s \mid 1 \leq \sigma < 2\}$
+  umfaßt. Ist dann $f$ eine auf $G$ holomorphe Funktion, welche auf dem
+  Vertikalstreifen $\{s \mid 1 \leq \sigma < 2\}$ beschränkt ist und welche
+  $f(1) = 1$ und $f(s + 1) = s \cdot f(s)$ für $s$, $s + 1 \in G$ erfüllt, so
+  ist schon $f = \Gamma|G$.
+\end{thm}
+
+\begin{proof}
+  Wie im Beweis von Satz~\ref{thm:gamma} folgt zunächst (mit $f$ anstelle von
+  $\Gamma$), daß $f$ eine meromorphe Fortsetzung auf die ganze komplexe
+  Ebene besitzt, welche Polstellen genau auf $\{0, -1, -2, \dotsc\}$ besitzt.
+  Alle diese Polstellen sind einfach und das Residuum bei $-n$, $n \in \mathbf
+  N_0$ ist durch $\frac{(-1)^n}{n!}$ gegeben. Bezeichnen wir diese Fortsetzung
+  wieder mit $f(s)$, so gilt $f(s + 1) = s \cdot f(s)$ für alle $s \notin
+  \{0, -1, -2, \dotsc\}$.
+  
+  Damit ist die Funktion $h(s) = f(s) - \Gamma(s)$ hebbar zu einer ganzen
+  Funktion, welche $h(1) = 0$ und $h(s + 1) = s \cdot h(s)$ für alle $s \in \mathbf C$
+  erfüllt und welche in dem Vertikalstreifen $\{s \mid 1 \leq \sigma < 2\}$  beschränkt
+  ist, etwa durch $C$.
+  
+  Für $0 \leq \sigma < 1$ gilt dann
+  \[
+    |h(s)| = \frac{1}{|s|} |h(s + 1)| \leq \frac{C}{|s|} \leq \frac C{|t|},
+  \]
+  wobei $t$ nach Konvention den Imaginärteil von $s$ bezeichnet. Für $|t| > 1$ ist
+  damit $h(s)$ in $0 \leq \sigma < 1$ gleichmäßig beschränkt. Weiter ist $h(s)$
+  als stetige Funktion auf der kompakten Menge $\{s \mid 0 \leq \sigma \leq 1, |t| \leq 1\}$
+  beschränkt. Damit ist insgesamt $h(s)$ gleichmäßig in $0 \leq \sigma < 1$, also auch 
+  gleichmäßig in $0 \leq \sigma \leq 1$ beschränkt.
+  
+  Wir schreiben dann $H(s) \coloneqq h(s) \cdot h(1 - s)$. Diese Funktion ist
+  also gleichmäßig in $0 \leq \sigma \leq 1$ beschränkt. Eine kleine
+  Rechnung zeigt $H(s + 1) = - H(s)$ für alle $s \in \mathbf C$; insbesondere
+  muß $H(s)$ auf der ganzen komplexen Ebene beschränkt sein. Nach dem Liouvilleschen
+  Satz ist also $H(s) \equiv H(0) = 0$. Es folgt, daß $h(s) \cdot h(1 - s) \equiv 0$,
+  das heißt die Nullstellen von $h(s)$ häufen sich bei $\frac 1 2$. Nach dem
+  Identitätssatz ist damit $h(s) = 0$, also $f(s) = \Gamma(s)$. 
+\end{proof}
+
+\section{Die Produktdarstellung der Gamma-Funk\-tion}
+
+\begin{prop}
+  Der Grenzwert
+  \[
+    \gamma \coloneqq \lim_{n \to \infty} \left(1 + \frac 1 2 + \dotsb + \frac 1 n - \log n\right),
+  \]
+  die \emph{Euler--Mascheronische Konstante}, existiert und ist gleich
+  \[
+    \gamma = \lim_{s \to 1} \left(\zeta(s) - \frac 1 {s - 1}\right).
+  \]
+\end{prop}
+
+\begin{proof}
+  Wir haben schon gesehen, daß
+  \[
+    \zeta(s) - \frac 1 {s - 1} = \sum_{n = 1}^\infty \int_n^{n + 1} \left(\frac 1 {n^s} - \frac 1 {k^s}\right) \, dk
+  \]
+  für $\sigma > 0$,
+  das heißt
+  \[
+    \begin{split}
+      \lim_{s \to 1} \left(\zeta(s) - \frac 1 {s - 1}\right)
+      & = \sum_{n = 1}^\infty \int_n^{n + 1} \left(\frac 1 n - \frac 1 k\right)  \, dk
+      \\
+      & = \lim_{n \to \infty} \left(\sum_{k = 1}^n \frac 1 n - \log (n + 1)\right)
+      \\
+      & = \lim_{n \to \infty} \left(\sum_{k = 1}^n \frac 1 n - \log n \right),
+    \end{split}
+  \] 
+  da $\lim_{n \to \infty} \bigl(\log n - \log(n + 1)\bigr) = 0$.
+\end{proof}
+
+\begin{lem}
+  Das unendliche Produkt
+  \[
+    s \cdot e^{\gamma s} \cdot \prod_{\nu = 1}^\infty \left(1 + \frac s \nu\right) e^{- \frac s \nu}
+  \]
+  konvergiert kompakt auf der komplexen Ebene und stellt somit eine ganze Funktion
+  dar.
+\end{lem}
+
+\begin{proof}
+  Für jedes komplexe $z$ mit $|z| < 1$ gilt
+  \[
+    |\log(1 + z) - z| = \left|\sum_{n = 2}^\infty (-1)^n \frac{z^n} {n}\right|
+    \leq |z|^2 \sum_{k = 0}^\infty \frac{|z|^{k}}{k + 2}
+    \leq |z|^2 \sum_{k = 0}^\infty |z|^k
+    = \frac{|z|^2}{1 - |z|}.
+  \]
+  Seien $r > 0$, und sei $n_0 \ge r$ eine natürliche Zahl.
+  Mit der obigen Abschätzung folgt, daß
+  \[
+    \sum_{\nu = n_0}^\infty \left|\log\left(1 + \frac s \nu\right) - \frac s \nu\right|
+    \leq \sum_{\nu = n_0} \left|\frac s \nu\right|^2 \frac{1}{1 - |\frac s \nu|}
+    \leq \frac {r^2} 2 \sum_{\nu = n_0}^\infty \frac 1 {\nu^2}.
+  \] 
+  für $|s| \leq \frac r 2$. Aus der Konvergenz von $\sum_{\nu = 1}^\infty \frac 1 {\nu^2}$
+  folgt damit, daß
+  \[
+    \sum_{\nu = n_0}^\infty \left|\log(1 + \frac s \nu) - \frac s \nu\right|
+  \]
+  auf der abgeschlossenen Kreisscheibe $\{s \mid |s| \leq \frac r 2\}$ kompakt
+  konvergiert. Damit ist das unendliche Produkt 
+  \[
+   \prod_{\nu = 1}^\infty \left(1 + \frac s \nu\right) \cdot e^{-\frac s \nu}.
+  \]
+  auf der ganzen komplexen Ebene kompakt konvergent.
+\end{proof} 
+
+\begin{thm}[Gaußsche Produktentwicklung]
+  Die meromorphe Funktion $\frac 1 {\Gamma(s)}$ läßt sich zu einer ganzen
+  Funktion $G(s)$ fortsetzen für die
+  \[
+    G(s) = s \cdot e^{\gamma s} \cdot \prod_{\nu = 1}^\infty \left(1 + \frac s \nu\right) e^{- \frac s \nu}
+    = \lim_{n \to \infty} \frac{s \cdot (s + 1) \dotsm (s + n)} {n! \cdot n^s}
+  \]
+  für alle $s \in \mathbf C$ gilt.
+\end{thm}
+
+\begin{proof}
+  Zunächst ist
+  \[
+    \begin{split}
+      \lim_{n \to \infty} \frac{s \cdot (s + 1) \dotsm (s + n)} {n! \cdot n^s}
+      & =
+      \lim_{n \to \infty} s \cdot e^{-s \log n} \cdot \prod_{\nu = 1}^n \left(1 + \frac s \nu\right)
+      \\
+      & = \lim_{n \to \infty} s \cdot e^{s \cdot (1 + \frac 1 2 + \dotsb + \frac 1 n - \log n)} \cdot \prod_{\nu = 1}^n (1 + \frac s \nu) \cdot e^{- \frac s \nu}
+      \\
+      & = s \cdot e^{\gamma s} \cdot \prod_{\nu = 1}^\infty \left(1 + \frac s \nu\right) \cdot e^{- \frac s \nu},
+    \end{split}
+  \]
+  und die rechte Seite ist das kompakt konvergente Produkt aus dem
+  vorhergehenden Lemma, das heißt $G(s)$ ist insbesondere eine ganze
+  Funktion.
+  
+  Es bleibt nachzurechnen, daß $\frac 1 {G(s)}$ die Voraussetzungen des
+  Wielandtschen Satzes erfüllt. Für $\sigma > 0$ ist zunächst
+  \[
+    \left|\frac 1 {G(s)}\right| = \lim_{n \to \infty} \frac{n! \cdot |n^s|}{|s| \cdot |s + 1| \dotsm |s + n|}
+    \leq \lim_{n \to \infty} \frac{n! \cdot n^\sigma}{\sigma \cdot (\sigma + 1) \dotsm (\sigma + n)}
+    = \frac 1 {G(\sigma)}
+  \]
+  und die rechte Seite ist auf dem Kompaktum $\{\sigma \mid 1 \leq \sigma \leq 2\}$
+  beschränkt, womit $\frac 1 {G(s)}$ auf dem Vertikalstreifen $\{s \mid 1 \leq \sigma < 2\}$
+  beschränkt ist.
+  
+  Schließlich ist
+  \[
+    \frac 1 {G(1)} = \lim_{n \to \infty} \frac{n! \cdot n}{(n + 1)!}
+    = \lim_{n \to \infty} \frac n {n + 1} = 1
+  \]
+  und
+  \[
+    \begin{split}
+      \frac 1 {G(s + 1)} & = \lim_{n \to \infty} \frac{n \cdot n^{s + 1}}{(s + 1) \cdot (s + 2) \dotsm (s + n + 1)}
+      \\
+      & = s \cdot \lim_{n \to \infty} \Bigl(\frac n {n + 1}\Bigr)^{s + 1} \cdot \frac{(n + 1)!}{s \cdot (s + 1) \dotsm (s + n + 1)}
+      \\
+      & = s \cdot \frac 1 {G(s)}.
+    \end{split}
+  \]
+  für alle $s \in \mathbf C \setminus \{0, 1, 2, \dotsc\}$.
+\end{proof}
+
+\begin{cor}
+  Die Gamma-Funktion $\Gamma$ hat keine Nullstellen in der komplexen Ebene.
+  \qed
+\end{cor}
+
+\begin{thm}[Eulerscher Ergänzungsatz]
+  Es gilt
+  \[
+    \Gamma(s) \Gamma(1 - s) = \frac{\pi}{\sin \pi s}
+  \]
+  als Gleichheit zwischen meromorphen Funktionen.
+\end{thm}
+
+\begin{proof}
+  Die Funktion
+  \[
+    f(s) \coloneqq \Gamma(s) \Gamma(1 - s) - \frac{\pi}{\sin \pi s}
+  \]
+  hat isolierte Singularitäten genau an allen $n \in \mathbf Z$, und zwar höchstens
+  Pole erster Ordnung. Da das Residuum von $\frac \pi{\sin \pi s}$ bei $n$
+  aber gerade $\frac {\pi}{\pi \cos(\pi n)} = (-1)^n$ ist, heben sich die Residuen
+  der Summanden von $f(s)$ gerade auf. Die Funktion $f(s)$ können wir also zu
+  einer ganzen Funktion fortsetzen.
+  
+  Es ist $f(s)$ auf $\{s \mid 0 \leq \sigma \leq 1, |t| > 1\}$ beschränkt, denn
+  dies gilt für ihre beiden Summanden. Außerdem ist $f(s)$ als stetige Funktion
+  auf dem Kompaktum $\{s \mid 0 \leq \sigma \leq 1, |t| \leq 1\}$ beschränkt.
+  Es folgt, daß $f(s)$ auf $\{s \mid 0 \leq \sigma \leq 1\}$ insgesamt beschränkt
+  ist. Da
+  \[
+    f(s + 1) = - f(s)
+  \]
+  für alle $s$, ist damit $f(s)$ insgesamt eine beschränkte Funktion, nach dem
+  Liouvilleschen Satz also konstant. Indem wir $s = -\frac 1 2$ in die Formel für die
+  Quasi-Periodizität von $f(s)$ einsetzen, erhalten wir $f(\frac 1 2) = f(-\frac 1 2) =  - f(\frac 1 2)$, also
+  $f(\frac 1 2) = 0$. Damit ist $f(s) \equiv 0$. 
+\end{proof}
+
+\begin{cor}
+  Es ist $\Gamma(\frac 1 2) = \sqrt{\pi}$.
+  \qed
+\end{cor}
+
+\begin{cor}
+  Es ist
+  \[
+    \frac{\sin \pi z}{\pi} = z \prod_{n = 1}^\infty \left(1 - \frac{z^2}{n^2}\right)
+  \]
+  im kompakter Konvergenz auf $\mathbf C$.
+  \qed
+\end{cor}
+
+\begin{cor}[Partialbruchentwicklung des Kotangens]
+  Es ist
+  \[
+    \pi\cot \pi z = \frac 1 z + \sum_{n, n \neq 0} \left(\frac{1}{z - n} + \frac 1 n\right)
+  \]
+  in kompakter Konvergenz, wobei $n$ alle ganzen Zahlen (außer $0$) durchläuft.
+\end{cor}
+
+\begin{proof}
+  Wir haben
+  \[
+    \frac d {dz} \log \frac{\sin \pi z}{\pi} = \frac{\sin'\pi z}{\sin \pi z}
+    = \pi \cot \pi z.
+  \]
+  Auf der anderen Seite ist
+  \[
+    \frac{\sin \pi z}{\pi} = z \prod_{n = 1}^\infty \left(1 - \frac{z^2}{n^2}\right)
+    = z \prod_{|n| = 1}^\infty \left(1 - \frac z n\right) e^{\frac z n}
+  \]
+  und damit
+  \[
+    \frac d {dz} \log \frac{\sin \pi z}{\pi} = \frac 1 z + \sum_{|n| = 1}^\infty
+    \frac d {dz} \log \Biggl(\Bigl(1 - \frac z n\Bigr) e^{\frac z n}\Biggr)
+    = \frac 1 z + \sum_{|n| = 1}^\infty \left(\frac 1 {z - n} + \frac 1 n\right).  
+    \qedhere
+  \]
+\end{proof}
+ 
+\begin{cor}[Legendresche Relation]
+  Es gilt folgende Gleichheit meromorpher Funktionen:
+  \[
+    \Gamma\left(\frac s 2\right) \Gamma\left(\frac{s + 1} 2\right) = \frac{\sqrt\pi}{2^{s - 1}} \Gamma(s).
+  \]
+\end{cor}
+
+\begin{proof}
+  Es reicht nachzuweisen, daß die Funktion
+  \[
+    f(s) = \frac{2^{s - 1}}{\sqrt{\pi}} \Gamma\left(\frac s 2\right) \Gamma\left(\frac{s + 1} 2\right)
+  \]
+  die Voraussetzungen des Wielandtschen Satzes erfüllt: Zunächst ist die Funktion
+  auf dem Vertikalstreifen $\{s \mid 1 \leq \sigma \leq 2\}$ beschränkt, da dies
+  für ihre Faktoren gilt. Weiter ist
+  \[
+    f(1) = \frac 1 {\sqrt\pi} \Gamma\left(\frac 1 2\right) \Gamma(1) = 1
+  \]
+  und
+  \[
+    f(s + 1) = \frac{2^s}{\sqrt{\pi}} \Gamma\left(\frac {s + 1} 2\right)
+    \Gamma\left(\frac s 2 + 1\right)
+    = \frac s 2 \frac{2^s}{\sqrt{\pi}} \Gamma\left(\frac {s + 1} 2\right)
+    \Gamma\left(\frac s 2\right) = s f(s).
+    \qedhere
+  \]
+\end{proof}
+
+\section{Die Stirlingsche Formel}
+
+\begin{lem}
+  \label{lem:gudermann}
+  Sei $\log$ der Hauptzweig des komplexen Logarithmus. Für die auf der negativ
+  geschlitzten Ebene $G$ definierte Funktion 
+  \[
+    H_0(z) = \Bigl(z + \frac 1 2\Bigr) (\log (z + 1) - \log z) - 1
+  \]
+  gilt dann
+  \[
+    |H_0(z)| \leq \frac 1 2 \left| \frac 1 {2 z + 1} \right|^2
+  \]
+  für alle $z \in G$ mit
+  $\left|z + \frac 1 2\right| > 1$.
+\end{lem}
+
+\begin{proof}
+  Für $z > 0$ und $w \coloneqq \frac 1 {2 z + 1}$ gilt
+  \[
+    \frac 1 {2w} \log \frac{1 + w}{1 - w} - 1 = H_0(z)
+  \]
+  nach den elementaren Rechenregeln des Logarithmus. Aus dem Identitätssatz
+  folgt, daß die Gleichheit dann auch schon für alle komplexen $z$ mit $\Re z > 1$
+  gelten muß (denn dort sind beide Seiten wohldefiniert). Da die
+  Potenzreihenentwicklungen
+  \[
+    - \log (1 - w) = \sum_{k = 1}^\infty \frac {w^k}{k}
+  \]
+  und entsprechend
+  \[
+    \log (1 + w) = \sum_{k = 1}^\infty (-1)^{k - 1} \frac{w^k}{k}
+  \]
+  für $|w| < 1$ gelten, folgt
+  \[
+    H_0(z) = \sum_{n = 1}^\infty \frac{w^{2n}}{2n + 1}
+  \]
+  auf diesem Bereich. Für $|w| < \frac 1 2$, also $\left|z + \frac 1 2\right| > 1$,
+  können wir dies wie folgt durch
+  die geometrische Reihe abschätzen:
+  \[
+    H_0(z) \leq \frac 1 3 |w|^2 \sum_{n = 0}^\infty \Bigl(\frac 1 4\Bigr)^n
+    = \frac 4 9 |w|^2 < \frac 1 2 |w|^2 = \frac 1 2 \left|\frac 1 {2 z + 1}\right|^2.
+  \]
+\end{proof}
+
+\begin{prop}
+  Die Reihe
+  \[
+    H(z) \coloneqq \sum_{n = 0}^\infty H_0(z + n)
+  \]
+  konvergiert in der negativ geschlitzten komplexen Ebene $G$ absolut kompakt. In jedem
+  Winkel $W = \{r e^{i \phi} \mid -\pi + \delta \leq \phi \leq \pi - \delta\}$
+  mit $0 < \delta \leq \pi$ gilt
+  \[
+    \lim_{z \to \infty} H(z) = 0.
+  \]
+\end{prop}
+
+\begin{proof}
+  Jede kompakte Teilmenge von $G$ liegt in einem geeigneten Winkel $W$. Aus
+  diesem Grunde reicht es, gleichmäßige Konvergenz auf einem solchen $W$
+  nachzurechnen. Aufgrund des Lemmas gibt es eine natürliche Zahl $N \ge 0$ und 
+  eine reelle Zahl $C \ge 0$, so daß
+  \[
+    |H_0(z + n)| \leq \frac C{n^2},
+  \]
+  wenn nur $n \ge N$. Damit ist die Zeta-Reihe $\zeta(2)$ in geeigneter Weise
+  eine Majorante für die Reihe $\sum_{n = 0}^\infty |H_0(z + n)|$ auf $W$,
+  womit die gleichmäßige Konvergenz nachgewiesen ist.
+
+  Weiter gilt nach dem Hilfssatz, daß $\lim_{z \to \infty} H_0(z + n) = 0$ für alle $n$.
+  Schreiben wir also
+  \[
+    |H(z)| \leq \sum_{n = 0}^{M - 1} |H_0(z + n)| + \sum_{n = M}^\infty |H_0(z + n)|
+    \leq \sum_{n = 0}^{M - 1} |H_0(z + n)| + \sum_{n = M}^\infty \frac C {n^2},
+  \]
+  wobei $M \ge N$, so gilt
+  \[
+    \limsup_{z \to \infty} |H(z)| \leq \sum_{n = M}^\infty \frac C{n^2}.
+  \]
+  Der Grenzübergang $M \to \infty$ liefert dann das gewünschte Resultat.
+\end{proof}
+
+\begin{lem}
+  Die auf der negativ geschlitzten komplexen Ebene $G$ definierte
+  holomorphe Funktion
+  \[
+    h(z) \coloneqq z^{z - \frac 1 2} e^{-z} e^{H(z)}
+  \]
+  ist in dem Vertikalstreifen $\{x + i y \mid 2 \leq x \leq 3\}$ beschränkt.
+  (Hierbei ist $z^{z - \frac 1 2} = e^{(z - \frac 1 2) \log z}$, wobei
+  $\log$ weiterhin den Hauptzweig des Logarithmus' bezeichnet.)
+\end{lem}
+
+\begin{proof}
+  Wir behaupten zunächst, daß $e^{(z - \frac 1 2) \log z}$ in jedem
+  Vertikalstreifen
+  \[
+    \{x + i y \mid a \leq x \leq b\}
+  \]
+  mit $0 < a < b$
+  beschränkt ist. Dazu reicht es offensichtlich nachzuweisen, daß
+  \[
+    \Re\Biggl(\Bigl(z - \frac 1 2\Bigr) \log z\Biggr) 
+    = \Bigl(x - \frac 1 2\Bigr) \log r - y \phi
+    = - y \phi \Biggl(1 + \Bigl(x - \frac 1 2\Bigr) \frac{\log r} y\Biggr)
+  \]
+  nach oben beschränkt ist, wobei wir $z = x + i y = r e^{i \phi}$ mit
+  $-\pi < \phi < \pi$ geschrieben haben. Dies folgt aber aus der Tatsache, 
+  daß $\lim_{y \to \pm \infty} \phi = \pm \frac{\pi} 2$ lokal gleichmäßig in $x$, also
+  $\lim_{y \to \pm \infty} (-y \phi) = -\infty$, und daß
+  \[
+    \lim_{y \to \pm \infty} \Biggl(1 + \Bigl(x - \frac 1 2\Bigr) \frac{\log r} y\Biggr) = 1,
+  \]
+  wieder lokal gleichmäßig in $x$.
+  
+  Mit einem ähnlichen Vorgehen wie im Beweis der Proposition folgt aus
+  Lemma~\ref{lem:gudermann}, daß $H(z)$ im Vertikalstreifen, in dem $2 \leq x
+  \leq 3$ gilt, beschränkt ist. Aus Stetigkeitsgründen folgt, daß
+  $e^{H(z)}$ dort ebenso beschränkt ist. Damit ist insgesamt $h(z)$
+  dort beschränkt.
+\end{proof}
+
+\begin{thm}[Stirlingsche Formel]
+  Mit
+  \[
+    H(z) = \sum_{n = 0}^\infty \Biggl(\Bigl(z + n + \frac 1 2\Bigr) \log
+      \Bigl(1 + \frac 1 {z + n}\Bigr) - 1\Biggr)
+  \]
+  gilt
+  \[
+    \Gamma(z) = \sqrt{2 \pi} z^{z - \frac 1 2} e^{-z} e^{H(z)}
+  \]
+  für alle $z$ in der negativ geschlitzten Ebene $G$. In jedem Winkelbereich
+  \[
+    W = \{r e^{i \phi} \mid -\pi + \delta \leq \phi \leq \pi - \delta\}
+  \]
+  mit $0 < \delta \leq \pi$ konvergiert $H(z)$ für $z \to \infty$ gegen $0$.
+\end{thm}
+
+\begin{proof}
+  Wegen $H(z) - H(z + 1) = H_0(z)$ und
+  \[
+    h(z) = e^{(z - \frac 1 2) \log z - z + H(z)}
+  \]
+  gilt
+  \[
+    \begin{split}    
+    h(z + 1) 
+    & = e^{(z + \frac 1 2) \log (z + 1) - z - 1 + H(z) - H_0(z)}
+    \\
+    & = e^{(z + \frac 1 2) \log z - z + H(z)}
+    \\
+    & = z h(z).
+    \end{split}
+  \]
+  Die Funktion $h(z + 1)$ ist weiterhin auf dem Vertikalstreifen
+  $\{z \mid 1 \leq x < 2\}$ beschränkt. Damit ist dort aber auch
+  $h(z)$ wegen $|h(z)| = \frac{|h(z + 1)|}{|z|} \leq |h(z + 1)|$
+  beschränkt. Wir können damit den Wielandtschen Satz anwenden und
+  erhalten, daß
+  \[
+    \Gamma(z) = A \cdot h(z)
+  \]
+  für eine noch zu bestimmende Konstante $A$. Dies können wir mit Hilfe
+  der Legendreschen Relation
+  \[
+    A \cdot h\Bigl(\frac n 2\Bigr) \cdot h\Bigl(\frac{n + 1} 2\Bigr) = 2^{1 - n} \sqrt{\pi} \cdot h(n)  
+  \]
+  mit $n > 0$ bestimmen. Umgeformt ergibt eine kurze Rechnung, daß
+  \[
+    \sqrt\pi = A \cdot \Bigl(1 + \frac 1 n\Bigr)^{\frac n 2}
+    \cdot 2^{-\frac 1 2} \cdot
+    e^{-\frac 1 2 + H(\frac n 2) + H(\frac {n + 1} 2) - H(n)}.
+  \]
+  Wegen $\lim_{x \to \infty} H(x) = 0$ und
+  \[
+    \lim_{n \to \infty}\Bigl(1 + \frac 1 n\Bigr)^{\frac n 2} = \sqrt{e}
+  \]
+  können wir $\sqrt\pi = A \cdot \sqrt{e} \cdot 2^{-\frac 1 2} \cdot
+  e^{-\frac 1 2}$, also
+  \[
+    A = \sqrt{2 \pi}
+  \]
+  folgern.
+\end{proof}
+
+\begin{cor}
+  Es gilt die Asymptotik
+  \[
+    n! \sim \sqrt{2 \pi n} \Bigl(\frac n e\Bigr)^n 
+  \]
+  für $n \to \infty$. Genauer existiert
+  für alle $n \in \mathbf N_0$ ein $0 < \theta(n) < 1$, so daß
+  \[
+    n! = \sqrt{2 \pi n} \Bigl(\frac n e\Bigr)^n e^{\frac {\theta(n)} {12 n}}.
+  \]
+\end{cor}
+
+\begin{proof}
+  Sei $x > 0$ eine positive reelle Zahl. Mit
+  $0 < y \coloneqq \frac 1 {2 x + 1} < 1$ haben
+  wir schon gesehen, daß
+  \[
+    H_0(x) = y^2 \sum_{n = 0}^\infty \frac {y^{2n}}{2n + 3} > 0,
+  \]
+  also
+  \[
+    H_0(x)
+    \leq \frac 1 3 y^2 \sum_{n = 0}^\infty y^{2n}
+    = \frac {y^2} 3 \frac 1 {1 - y^2}
+    = \frac{1} {12 x (x + 1)}
+    = \frac 1 {12} \Bigl(\frac 1 x - \frac 1 {x + 1}\Bigr).
+  \]
+  Es folgt
+  \[
+    0 < H(x) < \frac 1 {12} \sum_{n = 0}^\infty \Bigl(
+      \frac 1 {x + n} - \frac 1 {x + n + 1}\Bigr) = \frac 1 {12 x}
+  \]
+  und damit $H(x) = \frac{\theta}{12 x}$ für ein $0 < \theta < 1$.
+  Es folgt mit $x = n$, daß
+  \[
+    n! = n \Gamma(n) = \sqrt{2 \pi n}
+    \Bigl(\frac n e\Bigr)^n e^{\frac {\theta}{12n}}.
+    \qedhere
+  \]
+\end{proof}
+
+\chapter{Die Riemannsche Zeta-Funktion}
+
+\section{Die Jacobische Theta-Reihe}
+
+\begin{dfn}
+  Die \emph{Jacobische Theta-Reihe} ist
+  \[
+    \theta(z, \tau) \coloneqq \sum_{n = -\infty}^\infty e^{\pi i (n^2 \tau + 2 n z)},
+  \]
+  wobei $z \in \mathbf C$ eine komplexe Variable und $\tau \in \mathbf H = \{\omega \mid \Im \omega > 0\}$ eine
+  Variable in der oberen Halbebene ist, die \emph{modulare Variable}.
+\end{dfn}
+
+\begin{prop}
+  Die Jacobische Theta-Reihe $\theta(z, \tau)$ konvergiert kompakt absolut auf
+  $\mathbf C \times \mathbf H$. Damit stellt $\theta(z, \tau)$ für festes
+  $\tau \in \mathbf H$ eine ganze Funktion in $z$ und für festes $z \in \mathbf C$
+  eine holomorphe Funktion auf $\mathbf H$ dar.
+\end{prop}
+
+\begin{proof}
+  Mit $v$ bezeichnen wir den Imaginärteil von $\tau$, mit $y$ den von $z$. Wir
+  zeigen, daß die Reihe auf jeder Menge der $\{(z, \tau) \mid -y_0 \leq y \leq y_0,
+  v \ge v_0\}$ mit $y_0, v_0 > 0$ gleichmäßig
+  absolut konvergiert: Die Reihe
+  \[
+    \sum_{n = -\infty}^\infty |e^{\pi i (n^2 \tau + 2 \pi z)}|
+    = \sum_{n = -\infty}^\infty e^{-\pi (n^2 v + 2 n y)}.
+  \]
+  wird von $\sum_{n = -\infty}^\infty e^{\pi (2 n y_0 - n^2 v_0)}$ dominiert.
+  Da $2 n y_0 - n^2 v_0 \leq - \frac 1 2 n^2 v_0$ bis auf endlich viele $n$,
+  reicht es damit, die Konvergenz von
+  \[
+    \sum_{n = -\infty}^\infty e^{- \frac \pi 2 n^2 v_0}   
+  \]
+  nachzuweisen. Die letzte Reihe ist aber Teilreihe $\sum_{n = -\infty}^\infty
+  q^{n^2}$, $q = e^{-\frac \pi 2 v_0} < 1$, der (absolut) konvergenten geometrischen
+  Reihe $\sum_{n = -\infty}^\infty q^{|n|}$.
+\end{proof}
+
+\begin{thm}[Fourierdarstellung periodischer holomorpher Funktionen]
+  Sei $f(z)$ eine holomorphe Funktion, welche auf einem \emph{Parallelstreifen}
+  \[
+    G \coloneqq \{z \mid y_0 < y < y_1\}
+  \]
+  mit $-\infty \leq y_0 < y_1 \leq \infty$ definiert ist (wobei $y$ wie üblich
+  den Imaginärteil der komplexen Variable $z$ bezeichnet). Ist dann $f(z)$ eine $1$-periodische
+  Funktion, das heißt $f(z + 1) = f(z)$, so läßt sich $f(z)$ in eine auf $G$ kompakt
+  konvergente \emph{Fourierreihe}
+  \[
+    f(z) = \sum_{n = -\infty}^\infty a_n e^{2 \pi i n z}
+  \]
+  entwickeln. Für jedes $y \in (y_0, y_1)$ sind die
+  \emph{Fourierkoeffizienten} $a_n$ durch
+  \[
+    a_n = \int_0^1 f(z) e^{- 2 \pi i n (x + i y)} \, dx
+  \]
+  bestimmt.
+\end{thm}
+
+\begin{proof}
+  Die Abbildung $q(z) \coloneqq e^{2 \pi i z}$ bildet das Gebiet $G$ auf den Kreisring
+  \[
+    K \coloneqq \{q \mid r < |q| < R\}
+  \]
+  ab, wobei $r \coloneqq e^{- 2 \pi y_1}$ und $R \coloneqq e^{- 2 \pi y_0}$.
+  Da $q(z) = q(z')$ genau dann gilt, wenn $z - z' \in \mathbf Z$, gibt es
+  wegen der $1$-Periodizität von $f(z)$ genau
+  eine Funktion $g\colon K \to \mathbf C$ mit
+  \[
+    g(e^{2 \pi i z}) = f(z)
+  \]
+  für $z \in G$. Entwickeln wir die Funktion $g(q)$ in eine Laurentreihe um $0$,
+  so erhalten wir
+  \[
+    g(q) = \sum_{n = -\infty}^\infty a_n q^n,
+  \]
+  wobei die $a_n$ eindeutig durch
+  \[
+    a_n = \frac 1 {2 \pi i} \oint_{|q| = \rho} \frac{g(q)}{q^{n + 1}} \, d q
+    = \int_0^1 \frac{g(\rho \cdot e^{2 \pi i x})}{\rho^n \cdot e^{2 \pi i n x}} \, dx
+  \]
+  mit $\rho \in (r, R)$ bestimmt sind. Schreiben wir $\rho = e^{-2 \pi y}$, $y \in (y_0, y_1)$,
+  so erhalten wir
+  \[
+    a_n = \int_0^1 f(x + i y) e^{- 2 \pi i n (x + i y)} \, dx.
+    \qedhere
+  \]
+\end{proof}
+
+\begin{thm}
+  Die Jacobische Theta-Funktion genügt den folgenden Transformationsformeln
+  \begin{align*}
+    \theta(z, \tau + 2) & = \theta(z, \tau) \\
+    \intertext{und}
+    \theta\left(z, - \frac 1 \tau\right) & = e^{\pi i z^2 \tau} \, \sqrt{\frac \tau i} \, \theta(z \tau, \tau)
+  \end{align*}
+  in der modularen Variable $\tau$, wobei die Wurzel den Zweig mit $\sqrt 1 = 1$
+  bezeichnet.
+\end{thm}
+
+\begin{proof}
+  Die erste Transformationseigenschaft ist sicherlich wahr, wie die Rechnung
+  \[
+    \theta(z, \tau + 2) = \sum_{n = -\infty}^\infty e^{\pi i (n^2 (\tau + 2) + 2 n z)}
+    = \sum_{n = -\infty^\infty} e^{2 \pi i n^2} \cdot e^{\pi i (n^2 \tau + 2 n z)}
+    = \theta(z, \tau)
+  \] 
+  zeigt. Die zweite Transformationseigenschaft ist weit weniger trivial. Wir
+  schreiben dazu zunächst
+  \[
+    f(z) \coloneqq e^{\pi i z^2 \tau} \, \theta(z \tau, \tau)
+    = \sum_{n = -\infty}^\infty e^{\pi i z^2 \tau + 2 \pi i n z \tau + \pi i n^2 \tau}
+    = \sum_{n = -\infty}^\infty e^{\pi i (n + z)^2 \tau}.
+  \]
+  Die rechte Seite ist sicherlich $1$-periodisch in $z$, so daß eine
+  Fourierentwicklung
+  \[
+    f(z) = \sum_{m = -\infty}^\infty a_m e^{2 \pi m z}
+  \]
+  mit
+  \[
+    a_m = \int_0^1 \sum_{n = -\infty}^\infty e^{\pi i (n + z)^2 \tau - 2 \pi i m z} \, dx
+  \]
+  existiert, wobei wir den Imaginärteil $y$ von $z = x + i y$ beliebig wählen können.
+  
+  Wegen der lokal gleichmäßigen absoluten Konvergenz der Reihe dürfen wir die Reihe aus
+  dem Integral ziehen und erhalten
+  \[
+    a_m = \sum_{n = -\infty}^\infty \int_0^1 e^{\pi i (n + z)^2 \tau - 2 \pi i m z} \, dx
+    = \int_{-\infty}^\infty e^{\pi i z^2 \tau - 2 \pi i m z} \, dx,
+  \]
+  wobei wir im Integral $z$ durch $z - n$ substituiert haben und $e^{2 \pi i m (z - n)}
+  = e^{2 \pi i m z}$ ausgenutzt haben.
+  
+  Quadratische Ergänzung liefert weiter
+  \[
+    a_m = e^{- \pi i \frac{m^2} \tau} \int_{-\infty}^\infty e^{\pi i m z^2 \tau - 2 \pi i m z + \pi i \frac {m^2} \tau} \, dx
+    = e^{- \pi i \frac{m^2} \tau} \int_{-\infty}^\infty e^{\pi i \tau (z - \frac m \tau)^2} \, dx.
+  \]
+  
+  Der Imaginärteil $y$ von $z$ ist für jedes $m$ frei wählbar, das heißt wir
+  können annehmen, daß $z - \frac m \tau$ eine reelle Zahl ist. Eine weitere
+  Substitution von $x$ durch $x + \Re \frac m \tau$ liefert dann
+  \[
+    a_m = e^{- \pi i \frac{m^2} \tau} \int_{-\infty}^\infty e^{\pi i \tau x^2} \, dx.
+  \]
+  
+  Im nächsten Schritt wollen wir das Integral $\int_{-\infty}^\infty e^{\pi i \tau x^2}$
+  berechnen, und zwar wollen wir
+  \[
+    \int_{-\infty}^\infty e^{\pi i \tau x^2} = \sqrt{\frac \tau i}^{-1}
+  \]
+  zeigen. Beiden Seiten der Gleichung sind holomorph in $\tau \in \mathbf H$,
+  nach dem Identitätssatz reicht es also, die Gleichung für $\tau = i v$ mit
+  $v > 0$ zu beweisen: In diesem Falle ist
+  \[
+    \int_{-\infty}^\infty e^{\pi i \tau x^2} \, dx = \int_{-\infty}^\infty e^{- \pi v x^2} \, dx
+    = \sqrt{\frac \tau i}^{-1} \int_{-\infty}^\infty e^{-\pi t^2} \, dt
+  \]
+  mit der Substitution $t = \sqrt{y} \, x$. Das Integral auf der rechten Seite hat
+  aber den aus der Analysis bekannten Wert
+  \[
+    \int_{-\infty}^\infty e^{-\pi t^2} \, dt = 1.
+  \]
+  
+  Wir haben damit
+  \[
+    a_m = e^{-\pi i \frac {m^2} \tau} \sqrt{\frac \tau i}^{-1},
+  \]
+  also
+  \[
+    f(z) = \sqrt{\frac \tau i}^{-1} \sum_{m - \infty}^\infty
+    e^{- \pi i \frac {m^2} \tau + 2 \pi i m z}
+    = \sqrt{\frac \tau i}^{-1} \theta(z, - \frac 1 \tau).
+    \qedhere
+  \] 
+\end{proof}
+
+\section{Die Funktionalgleichung der Riemannschen Zeta-Funktion}
+
+\begin{thm}[Riemannsche Funktionalgleichung]
+  Die meromorphe Funktion
+  \[
+    \xi(s) \coloneqq \pi^{- \frac s 2} \Gamma\Bigl(\frac s 2\Bigr) \zeta(s), 
+  \]
+  $\sigma > 0$, läßt sich zu einer meromorphen Funktion $\xi(s)$ auf $\mathbf C$
+  fortsetzen. Ihre einzigen Pole sind einfache Pole bei $s = 0$ und $s = 1$, und sie genügt
+  der Funktionalgleichung
+  \[
+    \xi(s) = \xi(1 - s)
+  \]
+  für alle $s$. 
+\end{thm}
+
+\begin{proof}
+  Es reicht, die Funktionalgleichung für $\sigma > 0$ nachzurechnen, denn mit ihrer Hilfe können
+  wir $\xi$ auf $\sigma < \frac 1 2$ durch die Werte für $\sigma > \frac 1 2$
+  fortsetzen. Für $\sigma > \frac 1 2$ hat $\xi(s)$ genau einen Pol, nämlich
+  einen einfach bei $s = 1$, der vom entsprechenden Pol der Riemannschen Zeta-Funktion
+  herrührt. Aus der Funktionalgleichung folgt dann, daß $\xi(s)$ einen weiteren
+  Pol, ebenfalls erster Ordnung, bei $s = 0$ hat.
+  
+  Um die Funktionalgleichung für $\sigma > 0$ zu beweisen, schauen wir uns
+  zunächst den Gamma-Faktor an. Die Substitution $t = \pi n^2 x$ liefert
+  \[
+    \pi^{- \frac s 2} \Gamma\left(\frac s 2\right) n^{-s} = \pi^{- \frac s 2} n^{-s} \int_0^\infty t^{\frac s 2} e^{-t} \, \frac{dt} t
+    = \int_0^\infty x^{\frac s 2} e^{-\pi n^2 x} \frac {dx} x.
+  \]
+  
+  Sei für einen Moment $\sigma > 1$. Summieren wir die Gleichung dann über alle
+  $n \in \mathbf N$, so erhalten wir
+  \[
+    \xi(s) = \pi^{-\frac s 2} \Gamma\left(\frac s 2\right) \zeta(s) = \sum_{n = 1}^\infty
+    \int_0^\infty x^{\frac s 2} e^{-\pi n^2 x} \, \frac {dx} x
+    = \int_0^\infty x^{\frac s 2} \sum_{n = 1}^\infty e^{-\pi n^2 x} \, \frac{dx} x,
+  \]
+  wobei die Reihe aufgrund lokal gleichmäßiger absoluter Konvergenz in das Integral gezogen
+  werden darf.
+  
+  Setzen wir $\omega(x) = \sum_{n = 1}^\infty e^{-\pi n^2 x}
+  = \frac{\theta(0, ix) - 1} 2$, so gilt nach der Theta-Transfor\-mationsformel,
+  daß
+  \[
+    \omega\Bigl(\frac 1 x\Bigr) = \frac{\theta(0, - \frac 1 {ix}) - 1} 2
+    = \frac{\sqrt x \cdot \theta(0, i x) - 1} 2
+    = - \frac 1 2 + \frac{\sqrt x} 2 + \sqrt x \cdot \omega(x).
+  \]
+  Damit haben wir
+  \[
+    \begin{split}
+      \int_0^1 x^{\frac s 2} \omega(x) \, \frac{dx} x
+      & = \int_1^\infty x^{-\frac s 2} \omega\Bigl(\frac 1 x\Bigr) \, \frac{dx} x
+      \\
+      & = \int_1^\infty x^{-\frac s 2} \Bigl(-\frac 1 2 + \frac{\sqrt{x}} 2 + \sqrt x \cdot \omega(x)\Bigr) \, \frac{dx}{x}
+      \\
+      & = -\frac 1 s + \frac 1 {s - 1} + \int_1^\infty x^{\frac{1 - s} 2} \omega(x) \, \frac{dx} x.
+    \end{split}
+  \]
+  
+  Es folgt
+  \[
+    \begin{split}
+      \xi(s) & = \int_0^\infty x^{\frac s 2} \omega(x) \, \frac{dx} x
+      \\
+      & = \int_0^1 x^{\frac s 2} \omega(x) \, \frac{dx} x
+      + \int_1^\infty x^{\frac s 2} \omega(x) \, \frac{dx} x
+      \\
+      & = - \frac 1 {s (s - 1)} + \int_1^\infty \Bigl(x^{\frac s 2} + x^{\frac{1 - s} 2}\Bigr) \omega(x) \, \frac{dx}x.
+    \end{split}
+  \]
+  Die Integral auf der rechten Seite ist für alle $s \in \mathbf C$ definiert, da 
+  $\omega(x)$ schnell genug für $x \to \infty$ abfällt. Die rechte Seite stellt
+  also eine meromorphe Funktion auf $\mathbf C$ dar. Nach dem Identitätssatz
+  gilt die Gleichheit beider Seiten daher insbesondere auch für $\sigma > 0$.
+  Die Funktionalgleichung für $\xi(s)$ folgt, denn die  
+  rechte Seite ist offensichtlich symmetrisch in der Vertauschung von $s$ mit $1 - s$.
+\end{proof}
+
+\begin{cor}
+  Die Riemannsche Zeta-Funktion besitzt eine meromorphe Fortsetzung $\zeta(s)$
+  auf $\mathbf C$. Ihr einziger Pol ist ein einfacher Pol bei $s = 1$. Außerhalb des \emph{kritischen
+  Streifens} $0 < \sigma < 1$ sind ihre einzigen Nullstellen bei $s = -2$, $-4$,
+  $-6$, \dots, die \emph{trivialen Nullstellen}. Sie genügt der Funktionalgleichung
+  \[
+    \zeta(s) = 2^s \pi^{s - 1} \Gamma(1 - s) \sin\left(\frac{\pi s} 2\right) \zeta(1 - s).
+  \]
+\end{cor}
+
+\begin{proof}
+  Die meromorphe Fortsetzung der Riemannschen Zeta-Funktion auf $\mathbf C$ ist
+  durch
+  \[
+    \zeta(s) = \frac{\xi(s)} {\pi^{- \frac s 2} \Gamma(\frac s 2)}
+  \]
+  gegeben.
+  
+  Die Funktionalgleichung der Riemannschen Zeta-Funktion folgt aus der der
+  Funktion $\xi(s)$: Zunächst ist
+  \[
+    \zeta(s) = \frac{\xi(s)}{\pi^{-\frac s 2} \Gamma\left(\frac s 2\right)}
+    = \frac{\xi(1 - s)}{\pi^{- \frac s 2} \Gamma\left(\frac s 2\right)}
+    = \frac{\pi^{s - \frac 1 2} \Gamma\left(\frac{1 - s} 2\right) \zeta(1 - s)}{\Gamma\left(\frac s 2\right)}.
+  \]
+  Anwendung der Eulerschen Ergänzungsformel für die Gamma-Term im Nenner liefert
+  dann
+  \[
+    \zeta(s) = \pi^{s - \frac 3 2} \Gamma\left(\frac {1 - s} 2 \right) \Gamma\left(\frac{1 - s} 2 + 1\right)
+    \sin\left(\frac{\pi s}2\right) \zeta(1 - s).
+  \]
+  Schließlich liefert die Anwendung der Legendreschen Relation, daß
+  \[
+    \zeta(s) = 2^s \pi^{s - 1} \Gamma(1 - s) \sin\left(\frac{\pi s} 2\right) \zeta(1 - s).
+  \] 
+ 
+  Diese Funktionalgleichung erlaubt uns, die Werte von $\zeta(s)$ für $\sigma \leq 0$
+  aus denen von $\sigma \ge 1$ zu bestimmen: Da $\Gamma(1) = 0$ und der Pol von
+  $\zeta(s)$ bei $s = 1$ von erster Ordnung ist, hat $\zeta(s)$ für $\sigma \leq 0$
+  keinen Pol. Da weiter $\Gamma(s)$ für $\sigma \ge 1$ keine weitere Nullstelle 
+  hat und ebenso $\zeta(s)$ für $\sigma \ge 1$ keine Nullstelle besitzt, hat
+  $\zeta(s)$ für $s \leq 0$ genau die Nullstellen von $\sin\left(\frac{\pi s} 2\right)$,
+  also $s = -2$, $-4$, $-6$, \dots.
+\end{proof}
+
+\section{Die Bernoullischen Zahlen und Werte der Riemannschen Zeta-Funktion}
+
+\begin{dfn}[Bernoullische Zahlen]
+  Die \emph{Bernoullischen Zahlen} $B_0$, $B_1$, $B_2$, \dots
+  sind durch die Taylorkoeffizienten einer ganzen Funktion gegeben:
+  \[
+    \frac{t}{e^t - 1} = \sum_{n = 0}^\infty B_n \frac{t^n}{n!}.
+  \]
+\end{dfn}
+
+\begin{xca}
+  Es gilt $B_0 = 1$, $B_1 = - \frac 1 2$, $B_2 = \frac 1 6$, $B_3 = 0$,
+  $B_4 = - \frac 1 {30}$, $B_5 = 0$, $B_6 = \frac 1 {42}$, \dots.
+\end{xca}
+
+\begin{prop}[Taylorentwicklung des Kotangens]
+  Der Kotangens erlaubt folgende Taylorreihenentwicklung um $0$:
+  \[
+    \pi z \cot(\pi z) = 1 + \sum_{n = 2}^\infty B_n \frac{(2 \pi i z)^n}{n!}.
+  \]
+\end{prop}
+
+\begin{proof}
+  Nach Definition des Kotangens gilt
+  \[
+    \pi z \cot(\pi z) = \pi z \frac{\cos(\pi z)}{\sin (\pi z)}
+    = \pi i z \frac{e^{i \pi z} + e^{- i \pi z}}{e^{i \pi z} - e^{- i \pi z}}
+    = \pi i z + \frac{2 \pi i z}{e^{2 \pi i z} - 1}.
+  \]
+  Nach Definition der Bernoullischen Zahlen haben wir also
+  \[
+    \pi z \cot(\pi z) = \pi i z + \sum_{n = 0}^\infty B_n \frac{(2 \pi i z)^n}{n!}.
+  \]
+  Da $B_0 = 1$ und $B_1 = - \frac 1 2$, folgt schließlich
+  \[
+    \pi z \cot(\pi z) = 1 + \sum_{n = 2}^\infty B_n \frac{(2 \pi i z)^n}{n!}.
+    \qedhere
+  \]
+\end{proof}
+
+\begin{lem}
+  In einer Umgebung um den Nullpunkt gilt
+  \[
+    \pi z \cot(\pi z) = 1 - 2 \sum_{k = 1}^\infty \zeta(2k) z^{2k}.
+  \]
+\end{lem}
+
+\begin{proof}
+  Die Partialbruchzerlegung des Kotangens liefert
+  \[
+    \begin{split}
+      \pi z \cot(\pi z) & = 1 + \sum_{|n| = 1}^\infty \Bigl(\frac{z}{z - n} + \frac z n\Bigr)
+      \\
+      & = 1 + \sum_{n = 1}^\infty \Bigl(\frac{z} {z - n} + \frac z {z + n}\Bigr)
+      \\
+      & = 1 - 2 \sum_{n = 1}^\infty \frac{z^2}{n^2 - z^2}
+      \\
+      & = 1 - 2 \sum_{n = 1}^\infty \sum_{k = 1}^\infty \frac{z^{2k}}{n^{2k}}.
+    \end{split}
+  \]
+  Da die Doppelreihe absolut konvergiert, dürfen wir die Summation vertauschen
+  und erhalten
+  \[
+    \pi z \cot(\pi z) = 1 - 2 \sum_{k = 1}^\infty \sum_{n = 1}^\infty \frac{z^{2k}}{n^{2k}}
+    = 1 - 2 \sum_{k = 1}^\infty \zeta(2k) z^{2k}.
+    \qedhere
+ \]
+\end{proof}
+
+\begin{thm}
+  Für jede natürliche Zahl $n > 1$ gilt
+  \[
+    \zeta(2n) = (-1)^{n - 1} \frac{(2 \pi)^{2n}}{2 (2n)!} B_{2n}.
+  \]
+\end{thm}
+
+\begin{proof}
+  Der Satz folgt durch Koeffizientenvergleich aus der vorhergehenden Proposition
+  und dem vorhergehenden Lemma.
+\end{proof}
+
+\begin{xca}
+  Es ist
+  \[
+    \sum_{n = 1}^\infty \frac 1 {n^2} = \frac{\pi^2} 6,\quad
+    \sum_{n = 1}^\infty \frac 1 {n^4} = \frac{\pi^4} {90},\quad
+    \sum_{n = 1}^\infty \frac 1 {n^6} = \frac{\pi^6} {945},\quad    
+    \dots
+  \]
+\end{xca}
+
+\begin{cor}
+  Für alle natürlichen Zahlen $n \ge 0$ gilt
+  \[
+    B_n = - n \zeta(1 - n).
+  \]
+\end{cor}
+
+\begin{proof}
+  Sei $k \ge 1$ eine natürliche Zahl. Nach der Funktionalgleichung der
+  Riemannschen Zeta-Funktion ist
+  \[
+    \zeta(1 - 2 k) = 2^{1 - 2k} \pi^{-2k} \cdot \Gamma(2k) \cdot \sin\Bigl(\frac{\pi (1 - 2k)} 2\Bigr) \cdot \zeta(2k)
+    = - \frac{B_{2k}}{2k},
+  \]
+  womit die Aussage für alle geraden $n$ mit $n \ge 2$ bewiesen ist. Für ungerades
+  $n > 1$ ist $\zeta(1 - n) = 0$. Auf der anderen Seite folgt aus der Taylorreihenentwicklung
+  des Kotangens und der Tatsache, daß $\pi z \cot(\pi z)$ eine gerade Funktion ist,
+  daß $B_n$ für ungerades $n > 1$ ebenfalls verschwindet.
+  
+  Es bleibt damit, $\zeta(0) = - B_1 = - \frac 1 2$ zu zeigen. Dazu bestimmen
+  wir das Residuum beider Seiten der Funktionalgleichung der Riemannschen Zeta-Funktion
+  an der Stelle $s = 1$ und erhalten
+  \[
+    \Res_{s = 1} \zeta(s) = 2 \sin\Bigl(\frac\pi 2\Bigr) \zeta(0) \cdot \Res_{s = 1} \Gamma(1 - s).
+  \]
+  Da $\Res_{s = 1} \zeta(s) = 1$ und $\Res_{s = 1} \Gamma(1 - s) = - \Res_{s = 0} \Gamma(s)
+  = -1$, haben wir $1 = - 2 \zeta(0)$, also $\zeta(0) = -\frac 1 2$.
+\end{proof}
+
+% Witz: Beweisen Sie 1 + 2 + 3 + 4 + 5 = ... = -1/12.
+
+
+\chapter{Elliptische Funktionen}
+
+\section{Die modulare Gruppe}
+
+\begin{prop}
+  Die Gruppe $\mathrm{SL}(\mathbf R, 2)$ operiert vermöge
+  \[
+    \begin{pmatrix}
+      a & b \\ c & d
+    \end{pmatrix} \cdot \tau \coloneqq \frac{a \tau + b}{c \tau + d}
+  \]
+  auf der oberen Halbebene $\mathbf H$. Die Gruppe der biholomorphen Abbildungen von
+  $\mathbf H$ auf sich selbst ist der Quotient $\mathrm{PSL}(\mathbf R, 2)$
+  der Gruppe nach ihrem Zentrum, gegeben durch die Matrizen $\pm (\begin{smallmatrix} 1 & 0 \\ 0 & 1\end{smallmatrix})$.
+\end{prop}
+
+\begin{proof}
+  Für jedes $A = (\begin{smallmatrix} a & b \\ c & d\end{smallmatrix})$ und $\tau$
+  ist
+  \[
+    \Im(A \tau) = \frac{\Im(\tau)}{|c \tau + d|^2},
+  \]
+  also wieder $A \tau \in \mathbf H$.
+  Dies zeigt, daß die Operation wohldefiniert ist. Daß eine Gruppenoperation
+  vorliegt, zeigt eine explizite Rechnung.
+  
+  Die Aussage über die Automorphismengruppe von $\mathbf H$ läßt sich vermöge
+  der biholomorphen Abbildung $\tau \to \frac{\tau - i}{\tau + i}$ von $\mathbf H$
+  auf $\mathbf E$
+  auf die durch das Schwarzsche Lemma bekannte Automorphismen bekannte Automorphismengruppe
+  der Einheitskreisscheibe $\mathbf E$ zurückführen. 
+\end{proof}
+
+\begin{dfn}
+  Die \emph{modulare Gruppe $\Gamma$} ist das Bild von $\mathrm{SL}(\mathbf Z, 2)$
+  in der Automorphismengruppe $\mathrm{PSL}(\mathbf R, 2)$ von $\mathbf H$. 
+\end{dfn}
+
+\begin{prop}
+  Die modulare Gruppe $\Gamma$ wird von den biholomorphen Abbildungen
+  \begin{align*}
+    \tau & \mapsto \tau + 1 \\
+    \intertext{und}
+    \tau & \mapsto - \frac 1 {\tau}
+  \end{align*}
+  erzeugt.
+\end{prop}
+
+\begin{proof}
+  Die Matrizen $(\begin{smallmatrix} 1 & 1 \\ 0 & 1\end{smallmatrix})$ und
+  $(\begin{smallmatrix} 0 & -1 \\ 1 & 0\end{smallmatrix})$ erzeugen die
+  $\mathrm{SL}(\mathbf Z, 2)$.
+\end{proof}
+
+\begin{lem}
+  \label{lem:modular_group}
+  Sei 
+  \[
+    D \coloneqq \Bigl\{\tau \in \mathbf H \mid |\tau| \ge 1, |\Re(\tau)| \leq \frac 1 2\Bigr\}.
+  \]
+  Jedes Kompaktum in $\mathbf H$ wird durch endliche viele Bilder von $D$ unter
+  Elementen $\gamma \in \Gamma$ überdeckt.
+\end{lem}
+
+\begin{proof}
+  Sei zunächst $\tau \in \mathbf H$ beliebig.
+  Da für ein $\gamma = (\begin{smallmatrix} a & b \\ c & d\end{smallmatrix})$ gilt,
+  daß
+  \[
+    \Im(\gamma \tau) = \frac{\tau}{|c \tau + d|^2},
+  \]
+  und jeweils nur endlich viele $c$, $d$ existieren, so daß $|c \tau + d|^2$ unter
+  einer gegebenen Schranke liegt, existiert ein $\gamma \in \Gamma$, so daß
+  \[
+    \Im(\gamma\tau)
+  \]
+  sein Maximum annimmt. Da Translation in horizontaler Richtung am Imaginärteil
+  nichts ändern, können wir ohne Einschränkung annehmen, daß $|\Re(\gamma\tau)| \leq \frac 1 2$.
+  Wäre jetzt $|\tau'| < 1$ mit $\tau' \coloneqq \gamma\tau$, so wäre $\Im(-\frac 1{\tau'}) = \frac{\Im(\tau)}{|\tau|^2} > \Im(\tau')$,
+  ein Widerspruch zur Wahl von $\gamma$. Damit liegt $\tau' \in D$, so daß wir
+  gezeigt haben, daß die $\gamma D$, $\gamma \in \Gamma$ ganz $\mathbf H$ überdecken.
+  
+  Schließlich bemerken wir, daß jeder Punkt $\tau$ in $D$ eine offene Umgebung $U(\tau)$ besitzt,   % TODO GENAUER
+  die nur durch endlich viele $\gamma D$ überdeckt wird. Die $\gamma U(\tau)$, $\gamma \in \Gamma$ 
+  bilden eine offene Überdeckung von $\mathbf H$, das für jede kompakte Menge
+  $K$ in $\mathbf H$ gibt es eine endliche Teilüberdeckung der $\gamma U(\tau)$, welche
+  jeweils wiederum durch endliche viele Bilder von $D$ unter den Elementen in $\Gamma$
+  überdeckt werden.
+\end{proof}
+
+\section{Eigenschaften elliptischer Funktionen}
+
+\begin{dfn}
+  Eine \emph{elliptische Funktion} zur modularen Variable $\tau \in \mathbf H$
+  (oder zum Gitter $\Lambda \coloneqq \mathbf Z + \mathbf Z \tau$) ist eine
+  meromorphe Funktion $f(z)$ in der komplexen Variable $z \in \mathbf C$, welche
+  bezüglich $1$ und $\tau$ doppelt-periodisch ist, das heißt
+  $f(z) = f(z + 1)$ und $f(z + \tau) = f(z)$.
+\end{dfn}
+
+\begin{dfn}
+  Der \emph{Grad einer elliptischen Funktion $f(z)$} ist die Anzahl ihrer
+  Polstellen mit Vielfachheiten modulo $\Lambda$, das heißt
+  \[
+    - \sum_{a} \nu_{z = a}(f(z)),
+  \]
+  wobei die Summe ein Repräsentantensystem der Polstellen modulo $\Lambda$ durchläuft.
+\end{dfn}
+
+\begin{xca}
+  Eine elliptische Funktion vom Grade $0$ ist holomorph und ist nach dem Liouvilleschen
+  Satze damit eine Konstante.
+\end{xca}
+
+\begin{prop}
+  Sei $f(z)$ eine elliptische Funktion. Dann gilt
+  \[
+    \sum_a \Res_{z = a} f(z) = 0,
+  \]
+  wobei die Summe ein Repräsentantensystem (der Polstellen) modulo $\Lambda$ 
+  durchläuft.
+\end{prop}
+
+\begin{proof}
+  Sei $z_0 \in \mathbf C$, und sei $A$ das Parallelogramm mit den
+  Ecken $z_0$, $z_0 + 1$, $z_0 + 1 + \tau$, $z_0 + \tau$. Sei $\gamma = \partial A$
+  die Randkurve, die diese Ecken genau in dieser Reihenfolge durchläuft.
+  Da die Spur von $\gamma$ kompakt ist und die Polstellen von $f(z)$ isoliert sind,
+  können wir $z_0$ so wählen, daß $\gamma$ keine Polstelle von $f(z)$ trifft.
+  Nach dem Residuensatz gilt dann
+  \[
+    \frac 1{2\pi i} \oint_\gamma f(z) \, dz = \sum_a \Res_{z = a} f(z).
+  \]
+  Aufgrund der Periodizität von $f(z)$ verschwindet aber das Integral auf der
+  linken Seite, da sich jeweils die Beiträge der gegenüberliegenden Seiten von
+  $A$ aufheben.
+\end{proof}
+
+\begin{xca}
+  Es gibt keine elliptischen Funktionen vom Grade $1$.
+\end{xca}
+
+\begin{cor}
+  Ist $f(z)$ eine elliptische Funktion, so gilt
+  \[
+    \sum_a \nu_{z = a} (f(z)) = 0,
+  \]
+  wobei die Summe ein Repräsentantensystem modulo $\Lambda$ durchläuft, das heißt
+  mit Vielfachheiten hat jede elliptische Funktion modulo $\Lambda$ gleich viele
+  Null- wie Polstellen.
+\end{cor}
+
+\begin{proof}
+  Wir wenden die Proposition auf die elliptische Funktion $\frac{f'(z)}{f(z)}$
+  an und erinnern uns an das Null- und Polstellen zählende Integral.
+\end{proof}
+
+\begin{prop}
+  Für jedes $\tau$ hat die Jacobische Thetareihe $\theta(z, \tau)$ nur einfache
+  Nullstellen und zwar bei allen Punkten des Gitters $\frac 1 2 + \frac \tau 2 + \Lambda$.
+\end{prop}
+
+\begin{proof}
+  Die Jacobische Theta-Reihe
+  $\theta(z, \tau)$ erfüllt
+  \begin{align*}
+    \theta(z + 1, \tau) & = \theta(z)
+    \\
+    \intertext{und}
+    \theta(z + \tau, \tau) & = e^{-\pi i (\tau + 2 z)} \theta(z, \tau)  
+  \end{align*}
+  wie eine kurze Rechnung zeigt.   % TODO
+  (Wir sagen auch, $\theta(z, \tau)$ sei \emph{quasi-elliptisch in $z$}.)
+  Sei $z_0 \in \mathbf C$, und sei $A$ das Parallelogramm mit den
+  Ecken $z_0$, $z_0 + 1$, $z_0 + 1 + \tau$, $z_0 + \tau$. Sei $\gamma = \partial A$
+  die Randkurve, die diese Ecken genau in dieser Reihenfolge durchläuft.
+  Dann liefert das Null- und Polstellen zählende Integral wegen der Quasi-Elliptizität, daß
+  \[
+    \frac 1 {2 \pi i} \oint_\gamma \frac{\theta'(z, \tau)}{\theta(z, \tau)} \, dz
+    = \frac 1 {2 \pi i} \oint_{z_0 + \tau}^{z_0 + \tau + 1} 2 \pi i \, dz
+    = 1,
+  \]
+  wobei der Strich bei $\theta'(z, \tau)$ für die partielle Ableitung nach $z$
+  steht. Da $\theta(z, \tau)$ als ganze Funktion keine Polstellen hat, besitzt
+  $\theta(z, \tau)$ modulo $\Lambda$ damit genau eine Nullstelle $z_1$. Wir behaupten,
+  daß diese gerade bei $\frac 1 2 + \frac\tau 2$ liegt:
+  \[
+    \begin{split}
+      \theta\Bigl(\frac 1 2 + \frac \tau 2, \tau\Bigr)
+      & = \sum_{n = -\infty}^\infty e^{\pi i (n^2 \tau + n \tau + n)}
+      \\
+      & = e^{- \pi i \frac\tau 4} \sum_{n = -\infty}^\infty e^{\pi i(\tau (n + \frac 1 2)^2 + n)}
+      \\
+      & = e^{- \pi i \frac\tau 4} \sum_{n = 0}^\infty e^{\pi i(\tau (n + \frac 1 2)^2)} (e^{\pi i n} + e^{- \pi i (n + 1)})
+      \\
+      & = 0.  
+      \qedhere
+    \end{split}
+  \]
+\end{proof}
+
+\begin{thm}
+  Seien $a_1$, \dots, $a_k$ und $b_1$, \dots, $b_k$ Punkte in $\mathbf C$
+  modulo $\Lambda$. Dann existiert genau dann eine elliptische Funktion, deren
+  Nullstellen mit Vielfachheiten gerade die $a_1$, \dots, $a_k$ modulo $\Lambda$
+  sind und deren Polstellen mit Vielfachen gerade die $b_1$, \dots, $b_k$ modulo
+  $\Lambda$ sind, wenn
+  \[
+    \sum_i a_i = \sum_i b_i
+  \]
+  modulo $\Lambda$.
+\end{thm}
+
+\begin{proof}
+  Existiere zunächst eine elliptische Funktion $f(z)$, deren Null- und Polstellen
+  modulo $\Lambda$ mit Vielfachheit gerade $a_1$, \dots, $a_k$ bzw.~$b_1$, \dots,
+  $b_k$ sind. Sei $z_0 \in \mathbf C$, und sei $A$ das Parallelogramm mit den
+  Ecken $z_0$, $z_0 + 1$, $z_0 + 1 + \tau$, $z_0 + \tau$. Sei $\gamma = \partial A$
+  die Randkurve, die diese Ecken genau in dieser Reihenfolge durchläuft. Dann können
+  wir annehmen, daß jeweils $a_i$, $b_i \in A$. Da die Spur von $\gamma$ kompakt
+  ist, können wir sogar annehmen, daß die $a_i$ und $b_i$ im Inneren von $A$ liegen.
+  Nach dem Residuensatz ist
+  \[
+    \frac 1 {2 \pi i} \oint_\gamma z \frac{f'(z)}{f(z)} \, dz
+    = \sum_{p \in A} p \Res_{z = p} \frac{f'(z)}{f(z)}
+    = \sum_i a_i - \sum_i b_i.
+  \]
+  Auf der anderen Seite folgt aus der Elliptizität von $f(z)$ und damit der von
+  $\frac{f'(z)}{f(z)}$, daß
+  \[
+      \frac 1 {2 \pi i} \oint_\gamma z \frac{f'(z)}{f(z)} \, dz \\
+      = \frac 1 {2 \pi i} \left(
+        \int_{z_0 + 1}^{z_0 + \tau + 1} \frac{f'(z)}{f(z)} \, dz
+        - \tau \int_{z_0}^{z_0 + 1} \frac{f'(z)}{f(z)} \, dz
+      \right) 
+      = m + n \tau
+  \]
+  für gewisse $m$, $n \in \mathbf Z$, also $\sum_i a_i - \sum_i b_i \in \Lambda$.
+  
+  Seien umgekehrt $a_i$ und $b_i$ mit $\sum_i a_i - \sum_i b_i \in \Lambda$
+  gegeben, etwa $\sum_i a_i - \sum_i b_i = m + n \tau$ für $m$, $n \in \mathbf Z$.
+  Wir haben eine elliptische Funktion zu diesen Null- bzw.~Polstellen
+  zu konstruieren. Wir setzen
+  \[
+    g(z) \coloneqq \frac{\prod_i\theta(z - a_i - \frac 1 2 - \frac\tau 2)}{\prod_j\theta(z - b_i - \frac 1 2 - \frac \tau 2)}.
+  \]
+  Nach dem Lemma hat diese genau die gesuchten Null- und Polstellen. Weiter ist
+  offensichlich $g(z + 1) = g(z)$. Außerdem gilt
+  \[
+    g(z + \tau) = e^{2\pi i(\sum_i a_i - \sum_i b_i)} g(z) = e^{2 \pi i n \tau} g(z)
+  \]
+  wegen $\theta(z + \tau, z) = e^{- \pi i(\tau + 2 z)}\theta(z, \tau)$.
+  Damit ist
+  \[
+    f(z) = e^{-2\pi i n z} g(z)
+  \]
+  eine elliptische Funktion. Da diese außerdem dieselben Pol- und Nullstellen wie $g(z)$
+  hat, sind wir fertig.
+\end{proof}
+
+\section{Die Weierstraßsche $\wp$-Funktion}
+
+\begin{lem}
+  Sei $\tau \in \mathbf H$. Dann konvergiert die Reihe
+  \[
+    \sum_{\omega \in \Lambda'} \frac{1}{\omega^s}
+  \]
+  auf der offenen Halbebene $\sigma > 2$ kompakt absolut, wobei
+  $\Lambda' \coloneqq \Lambda \setminus \{0\}$ und
+  \[
+    \Lambda \coloneqq \{m + n \tau \mid m, n \in \mathbf Z\}.
+  \]
+\end{lem}
+
+\begin{proof}
+  Die Reihe $\sum_{\omega \in \Lambda'} \frac 1{|\omega|^\sigma}$ mit $\sigma \ge \sigma_0$
+  wird bis auf eine Konstante durch das Integral
+  \[
+    \iint_K \frac{1} {(x^2 + y^2)^{\frac{\sigma_0} 2}} \, dx dy
+  \]
+  majorisiert, wobei $K = \{z \in \mathbf C \mid |z| \ge r_0\}$ mit geeignetem
+  $r_0 > 0$. Umrechnung in Polarkoordinaten liefert
+  \[
+    \iint_K \frac 1 {(x^2 + y^2)^{\frac {\sigma_0} 2}}
+    = \int_0^{2\pi} \int_{r_0}^\infty r^{1 - \sigma_0} \, dr d\phi
+    = 2 \pi \int_{r_0}^\infty r^{1 - \sigma_0} \, dr,
+  \]
+  und das Integral auf der rechten Seite konvergiert für $\sigma_0 > 2$.
+\end{proof}
+
+\begin{prop}
+  Die \emph{Weierstraßsche $\wp$-Funktion}
+  \[
+    \wp(z, \tau) = \frac 1 {z^2} + \sum_{\omega \in \Lambda'} \Bigl(\frac 1 {(z - \omega)^2} -  \frac 1{\omega^2}\Bigr)
+  \]
+  konvergiert kompakt absolut auf $\{(z, \tau) \mid z \notin \Lambda\}$
+  und stellt für alle $\tau \in \mathbf H$ eine elliptische Funktion
+  in $z$ zur modularen Variable $\tau$ dar. Ihre einzigen Pole in $z$ sind
+  Pole doppelter Ordnung bei allen $\omega \in \Lambda$.
+\end{prop}
+
+\begin{proof}
+  Sei $r > 0$. Für $|z| \leq \frac r 2$ und $\omega > r$ gilt dann
+  \[
+    \Bigl|\frac 1{(z - \omega)^2} - \frac 1{\omega^2}\Bigr|
+    = \Bigl|\frac{2 \omega z - z^2}{\omega^2 (z - \omega)^2}\Bigr|
+    = \Bigl|\frac{z (2 - \frac z \omega)}{\omega^3 (1 - \frac z \omega)^2}\Bigr|
+    \leq \frac{5r}{|\omega|^3}.
+  \]
+  Für
+  \[
+    \tau \in D = \Bigl\{\tau \in \mathbf H \mid |\tau| \ge 1, |\Re(\tau)| \leq \frac 1 2\Bigr\}
+  \]
+  gilt weiter
+  \[
+    |m + n \tau|^2 = m^2 \tau \overline \tau + 2 m n \Re(\tau) + n^2
+    \ge m^2 - m n + n^2 = |m \rho - n|^2.
+  \]
+  mit $\rho \coloneqq e^{\frac{2 \pi i} 3}$. Bis auf einen meromorphen
+  Anfangsterm wird die Reihe der Absolutglieder von $\wp(z, \tau)$
+  auf $|z| \leq \frac r 2$ und $\tau \in D$ damit
+  durch
+  \[
+    \sum_{m, n \in \mathbf Z, (m, n) \neq 0, |m + n \tau| > r}
+    \frac{5r}{|\omega|^3}
+    \leq 5r \sum_{m, n \in \mathbf Z, (m, n) \neq 0} \frac 1{|m \rho - n|^3}
+  \] 
+  majorisiert. Die rechte Seite ist nach
+  dem Lemma aber konvergent. Es folgt, daß $\wp(z, \tau)$ auf
+  $\{(z, \tau) \in \mathbf C \times D \mid z \notin \Lambda\}$ kompakt absolut
+  konvergiert.
+
+  Schreiben wir für den Moment $\Lambda(\tau)$ für $\Lambda$, so gilt offensichtlich
+  $\Lambda(\tau + 1) = \Lambda(\tau)$ und $\Lambda(-\frac 1{\tau}) = - \frac1{\tau} \Lambda(\tau)$.
+  Damit gilt
+  \begin{align*}
+    \wp(z, \tau + 1) & = \wp(z, \tau)
+    \intertext{und}
+    \wp\Bigl(z, - \frac 1 {\tau}\Bigr) & = \tau^2 \wp(\tau z, \tau).
+  \end{align*}
+  Damit folgt die Aussage für allgemeine $\tau \in \mathbf H$ aus
+  Lemma~\ref{lem:modular_group}.
+
+  Die Aussagen über die Polstellen folgen wie beim Mittag-Lefflerschen Satz. Es
+  bleibt damit zu zeigen, daß die so definierte Funktion $\wp(z, \tau)$ in $z$
+  eine elliptische Funktion ist. Dazu betrachten wir ihre Ableitung
+  \[
+    f(z) = \frac{\partial}{\partial z} \wp(z, \tau) = -2 \sum_{\omega \in \Lambda} \frac 1 {(z - \omega)^3}.
+  \]
+  Für diese gilt offensichtlich $f(z + \lambda) = f(z)$ für alle $\lambda \in \Lambda$.
+  Damit muß $\wp(z + \lambda, \tau) = \wp(z, \tau) + c$ für eine von $z$ unabhängige
+  Konstante $c$ gelten. Da $\wp(z, \tau)$ nach Definition aber eine gerade Funktion
+  in $z$ ist, das heißt $\wp(z, \tau) = \wp(-z, \tau)$, folgt mit $z = -\frac \lambda 2$, daß
+  \[
+    c = \wp\Bigl(\frac \lambda 2\Bigr) - \wp\Bigl(- \frac \lambda 2\Bigr) = 0.
+    \qedhere
+  \]
+\end{proof}
+
+\begin{cor}
+  Die Ableitung
+  \[
+    \wp'(z, \tau) \coloneqq \frac{\partial}{\partial z} \wp(z, \tau)
+    = -2 \sum_{\omega \in \Lambda} \frac 1 {(z - \omega)^3}
+  \]
+  ist ebenfalls eine elliptische Funktion in $z$ zur modularen Variablen $\tau$.
+  \qed
+\end{cor}
+
+\begin{prop}
+  Für jedes $\tau \in \mathbf H$ ist die Laurentreihenentwicklung der Weierstraßschen
+  $\wp$-Funktion um $z = 0$ durch
+  \[
+    \wp(z, \tau) = \frac 1{z^2} + \sum_{k = 2}^\infty (2k - 1) G_{2k}(\tau) z^{2k - 2}
+  \] 
+  gegeben, wobei die $G_n$ für $n \ge 3$ die sogenannten \emph{Eisensteinschen Reihen}
+  \[
+    G_n(\tau) = \sum_{\omega \in \Lambda'} \frac{1}{\omega^n}
+  \]
+  sind. (Offensichtlich ist $G_n = 0$ für ungerades $n$.)
+\end{prop}
+
+\begin{proof}
+  Wir führen zunächst die sogenannte \emph{Weierstraßsche Zeta-Funktion} ein, welche
+  durch
+  \[
+    \zeta(z, \tau) = \frac 1 z + \sum_{\omega \in \Lambda'} \Bigl(\frac 1{z - \omega} + \frac 1 {\omega} + \frac z {\omega^2}\Bigr)
+  \]
+  definiert ist und deren Konvergenz sich zum Beispiel analog der der Weierstraßschen
+  $\wp$-Funktion zeigen läßt. Eine kurze Rechnung zeigt, daß
+  \[
+    \wp(z, \tau) = -\zeta'(z, \tau),
+  \]
+  wobei der Strich wieder für die Ableitung nach der komplexen Variablen $z$ steht.
+  Außerdem zeigt Entwicklung in eine geometrische Reihe, daß
+  \[
+    \zeta(z, \tau) = \frac 1 z - \sum_{\omega \in \Lambda'} \sum_{n \ge 3} \frac {z^{n - 1}}{\omega^n}.
+  \]
+  Aufgrund absoluter Konvergenz dürfen wir die Summationen vertauschen und erhalten
+  \[
+    \zeta(z, \tau) = \frac 1 z - \sum_{n \ge 3} G_n(\tau) z^{n - 1},
+  \]
+  woraus sich durch Ableiten die zu beweisende Aussage über die Weierstraßsche
+  $\wp$-Funktion ergibt.  
+\end{proof}
+% AUFGABE: Transformationsverhalten der Eisensteinreihen; Wert bei i\infty.
+
+\begin{prop}
+  Die Weierstraßsche $\wp$-Funktion erfüllt die Differentialgleichung
+  \[
+    \wp'(z, \tau)^2 = 4 \wp(z, \tau)^3 - g_2(\tau) \wp(z, \tau) - g_3(\tau)
+  \]
+  mit $g_2(\tau) \coloneqq 60 G_4(\tau)$ und $g_3(\tau) \coloneqq 140 G_6(\tau)$.
+\end{prop}
+
+\begin{proof}
+  Aus Notationsgründen unterdrücken wir im folgenden die modulare Variable $\tau$. 
+  Aus der Laurentreihenentwicklung für die Weierstraßsche $\wp$-Funktion folgt
+  \begin{align*}
+    \wp(z) & = \frac 1 {z^2} + 3 G_4 z^2 + 5 G_6 z^4 + \dotsb \\
+    \intertext{und}
+    \wp'(z) & = - \frac 2 {z^3} + 6 G_4 z + 20 G_6 z^3 + \dotsb.
+  \end{align*}
+  Also ist
+  \begin{align*}
+    \wp^{\prime 2}(z) & = \frac 4 {z^6} - \frac{24 G_4}{z^2} - 80 G_6 + \dotsb,\\
+    \wp^3(z) & = \frac 1 {z^6} + \frac{9 G_4}{z^2} + 15 G_6 + \dotsb\\
+    \intertext{und damit}
+    \wp^{\prime 2}(z) - 4 \wp^3(z) & = -\frac{60 G_4}{z^2} - 140 G_6 + \dotsb.
+  \end{align*}
+  Insgesamt ergibt sich also
+  \[
+    \wp^{\prime 2}(z) - 4 \wp^3(z) + 60 G_4 \wp(u)  = - 140 G_6 + \dotsb,
+  \]
+  wobei die Punkte für positive Potenzen in $z$ stehen. Die Funktion auf der
+  rechten Seite hat bei $0$ keinen Pol, denn sie ist durch eine Potenzreihe
+  gegeben. Damit hat die linke Seite, welche offensichtlich eine elliptische Funktion
+  darstellt, bei $0$ ebenfalls keinen Pol und damit an
+  allen Gitterpunkten von $\Lambda$ ebenfalls nicht. Da ihre Summanden außerhalb
+  von $\Lambda$ keine Pole haben, ist sie damit eine ganze elliptische Funktion
+  und nach dem Liouvilleschen Satze damit konstant, nämlich gleich $-140 G_6$.
+\end{proof}
+
+\begin{xca}
+  Die Weierstraßsche $\wp$-Funktion $\wp(z, \tau)$ ist eine in $z$ elliptische Funktion
+  vom Grade $2$. Ihre Ableitung $\wp'(z, \tau)$ ist eine elliptische Funktion vom Grade
+  $3$.
+\end{xca}
+
+\begin{lem}
+  Sei $f(z)$ eine gerade elliptische Funktion. Dann gibt es genau eine rationale
+  Funktion $R(z)$ mit $f(z) = R(\wp(z, \tau))$.
+\end{lem}
+
+\begin{proof}
+  Sei $f(z)$ vom Grade $r$.
+  Wir wählen eine Konstante $c$, so daß die elliptische Funktion $f(z) - c$
+  modulo $\Lambda$ insgesamt $r$ einfache Nullstellen $z_1$, \dots, $z_r$
+  hat. Wir behaupten, daß $z_1 \neq - z_1$ modulo $\Lambda$. Andernfalls
+  hätten wir nämlich, daß
+  \[
+    f(z_1 + z) = f(-z_1 + z) = f(z_1 - z),
+  \]
+  also $f'(z_1 + z) = - f'(z_1 - z)$, also $f'(z_1) = 0$, das heißt $z_1$ wäre
+  eine doppelte Nullstelle von $f(z)$.
+  
+  Da $f(z)$ gerade ist, ist also $-z_1$ modulo $\Lambda$ eine weitere Nullstelle
+  von $f(z) - c$, das heißt, wir können insgesamt $r = 2 k$ schreiben und die
+  Nullstellen von $f(z) - c$ in der Form
+  \[
+    z_1, -z_1, z_2, -z_2, \dotsc, z_k, -z_k
+  \]
+  anordnen. Wählen wir ein weitere Konstante $c' \neq c$ mit den gleichen
+  Eigenschaften, so bekommen wir analog Nullstellen
+  \[
+    z_1', -z_1', z_2, -z_2', \dotsc, z_k', -z_k'
+  \]
+  von $f(z) - c'$.
+  Damit hat
+  \[
+    F(z) \coloneqq \frac{f(z) - c}{f(z) - c'}
+  \]
+  als Nullstellen genau die $\pm z_i$ und als Polstellen genau die $\pm z_i'$.
+  
+  Da $\wp(z, \tau)$ vom Grade $2$ ist, hat die gleichen Null- und Polstellen aber auch die Funktion
+  \[
+    Q(z) \coloneqq \frac{(\wp(z) - \wp(z_1)) \dotsm (\wp(z) - \wp(z_k))}{(\wp(z) - \wp(z_1')) \dotsm (\wp(z) - \wp(z_k'))},
+  \]
+  so daß $F(z) = C Q(z)$ für eine holomorphe elliptische Funktion $C$, das 
+  heißt für eine Konstante $C$. Lösen wir diese Gleichung nach $f(z)$ auf,
+  erhalten wir die Existenzaussage der Behauptung.
+  
+  Gäbe es zwei rationale Funktionen $R_i(z)$ mit $f(z) = R_i(\wp(z, \tau))$,
+  so könnten wir daraus eine Relation der Form $P(\wp(z, \tau)) = 0$ mit einem
+  nicht trivialen Polynom $P(z)$ von einem Grade $n$ machen. Der Grad der linken
+  Seite als elliptische Funktion ist dann $2n$, ein Widerspruch.
+\end{proof}
+
+\begin{thm}
+  Sei $f(z)$ eine elliptische Funktion. Dann existiert eindeutige rationale
+  Funktionen $R(z)$ und $S(z)$, so daß
+  \[
+    f(z) = R(\wp(z, \tau)) + \wp'(z, \tau) \cdot S(\wp(z, \tau)),
+  \]
+  das heißt der Körper der elliptischen Funktionen ist durch
+  \[
+    \mathbf C(\wp)[\wp']/(\wp^{\prime 2} - 4 \wp^3 - g_2 \wp - g_3)
+  \]
+  gegeben. 
+\end{thm}
+
+\begin{proof}
+  Es ist $\wp(z, \tau)$ eine gerade Funktion und $\wp'(z, \tau)$ eine ungerade Funktion, so daß der erste Summand in 
+  der gegebenen Darstellung gerade ist und der zweite ungerade ist. Ist also
+  $f(z)$ eine gerade Funktion, so folgt der Satz sofort aus dem Lemma.
+  Ist $f(z)$ ungerade, so ist $\frac{f(z)}{\wp'(z, \tau)}$ eine gerade elliptische
+  Funktion, so daß der Satz wieder aus dem Lemma folgt.
+  
+  Ist schließlich $f(z)$ eine beliebige elliptische Funktion, so können wir diese
+  gemäß
+  \[
+    f(z) = \frac 1 2 (f(z) + f(-z)) + \frac 1 2 (f(z) - f(-z))
+  \]
+  eindeutig in einen geraden und in einen ungeraden Summanden zerlegen.
+\end{proof}
+
+\begin{thm}
+  Durch
+  \[
+    \mathbf C \setminus \Lambda \to \mathbf C^2, z \mapsto (\wp(z, \tau), \wp'(z, \tau))
+  \]
+  wird eine modulo $\Lambda$ bijektive Abbildung auf die algebraische Menge
+  \[
+    E \coloneqq \{(x, y) \in \mathbf C^2 \mid y^2 - 4 x^3 - g_2(\tau) x - g_3(\tau) = 0\}
+  \]
+  definiert.
+\end{thm}
+
+\begin{proof}
+  Daß das Bild in der angegebenen Menge liegt, folgt sofort aus der Differentialgleichung
+  für die Weierstraßsche $\wp$-Funktion.
+  
+  Ist $(x, y) \in E$, so hat die Gleichung $\wp(z, \tau) = x$ modulo $\Lambda$
+  mit Vielfachheiten genau zwei Lösungen $z_1$ und $z_2$, denn $\wp(z, \tau) - x$ hat modulo $\Lambda$ mit Vielfachheiten
+  genau zwei Nullstellen, und zwar gilt $z_2 = -z_1$ modulo $\Lambda$. Für diese gilt $\wp'(z_1) = -\wp'(z_2)$. Da
+  gleichzeitig $\wp'(z_i)^2 = 4 \wp(z_i)^3 - g_2 \wp(z_i) - g_3 = 4 x^3 - g_2 x - g_3$,
+  folgt $y = \pm \wp'(z_i)$. Im Falle von $y \neq 0$ gibt es damit genau ein
+  $z_i$ modulo $\Lambda$, dessen Bild gerade $(x, y)$ ist. Im Falle $y = 0$ ist
+  $z_1$ offensichtlich eine doppelte Nullstelle von $\wp(z, \tau)$, also $z_1 = z_2$,
+  und wir sind wieder fertig.
+\end{proof}
+
+\section{Modulformen}
+
+\begin{dfn}
+  Sei $n \in \mathbf Z$.
+  Eine \emph{Modulfunktion vom Gewicht $k$} ist eine meromorphe Funktion $f(\tau)$ auf der
+  oberen Halbebene, welche den Transformationsgleichungen
+  \begin{align*}
+    f(\tau + 1) & = f(\tau) \\
+    \intertext{und}
+    f\Bigl(- \frac 1 \tau\Bigr) & = \tau^{k} f(\tau),
+  \end{align*}
+  das heißt
+  \[
+    f(\tau) = (c \tau + d)^{-k} f(\gamma \cdot \tau)
+  \]
+  für alle $\gamma = (\begin{smallmatrix} a & b \\ c & d\end{smallmatrix}) \in \Gamma$
+  genügt und welche auch noch meromorph in $i \infty$ ist, das heißt, deren Fourierentwicklung
+  \[
+    f(\tau) = \sum_{n = -\infty}^\infty a_n q^n
+  \]
+  mit $q = e^{2 \pi i \tau}$ endlichen Hauptteil $\sum_{n = -\infty}^{-1} a_n q^n$
+  besitzt. Ist $f$ auf $\mathbf H$ und auch bei $i \infty$ holomorph, das heißt verschwindet
+  insbesondere der Hauptteil ihrer Fourierentwicklung bei $q = 0$, so heißt $f$ \emph{Modulform (vom Gewicht $k$)}.
+\end{dfn}
+
+\begin{xca}
+  Ist $f(\tau)$ eine Modulfunktion vom Gewichte $k$, so ist
+  \[
+    f(\tau) = \Bigl(- \frac 1 \tau\Bigr)^k f\Bigl(- \frac 1 \tau\Bigr)
+    = (-1)^k f(\tau),
+  \]
+  das heißt, außer der trivialen Nullform gibt es keine Modulformen ungeraden Gewichtes.
+\end{xca}
+
+\begin{prop}
+  Die Eisensteinschen Reihen $G_k(\tau)$, $k \ge 3$ sind Modulformen vom Gewicht $k$.
+\end{prop}
+
+\begin{proof}
+  Wir können $k$ gerade annehmen. Aus der Reihendarstellung
+  \[
+    G_k(\tau) = \sum_{(m, n) \neq 0} \frac 1{(m + n\tau)^k}
+  \]
+  folgt sofort das Transformationsverhalten unter der modularen Gruppe $\Gamma$.
+  Es bleibt damit zu zeigen, daß $G_k$ holomorph bei $i \infty$ ist:
+  \[
+    \lim_{\tau \to i \infty} \sum_{(m, n) \neq 0} \frac1{(m + n\tau)^k}
+    = \sum_{(m, n) \neq 0} \lim_{\tau \to i\infty} \frac1{(m + n\tau)^k}
+    =  2 \sum_{m = 1}^\infty \frac 1{m^k} = 2 \zeta(k),
+  \]
+  das heißt, wir kennen insbesondere die Werte der Eisensteinschen Reihen bei
+  $i\infty$. (Aufgrund der gleichmäßigen Konvergenz der Reihe in $D$, welche sogar für
+  $\tau \to i\infty$ richtig bleibt, durften wir den Limes in die Summe ziehen.)
+\end{proof}
+
+\begin{thm}
+  Sei $f$ eine nicht verschwindende Modulfunktion vom Gewicht $k$. Dann
+  gilt
+  \[
+    \nu_{i \infty}(f) + \frac 1 2 \nu_i(f) + \frac 1 3 \nu_\rho(f) + \sum_p \nu_p(f) = \frac k{12},
+  \]
+  wobei die Summe über ein Repräsentantensystem von $\mathbf H$ modulo $\Gamma$
+  läuft, welches die Klassen von $i = e^{\frac {\pi i} 2}$ und $\rho = e^{\frac{2 \pi i} 3}$
+  ausspart. Die Nullstellenordnung von $f(\tau)$ bei $i \infty$ wird hierbei 
+  durch
+  \[
+    \nu_{i \infty} (f) = \nu_{q = 0} f(q)
+  \]
+  definiert.
+\end{thm}
+
+\begin{proof}
+  Zunächst stellen wir fest, daß die Summe $\sum_p \nu_p(f)$ im Satz in der
+  Tat endlich ist: Zunächst können wir annehmen, daß $p \in D$, da jede Klasse
+  modulo $\Gamma$ einen Repräsentanten in $D$ besitzt, welcher sogar eindeutig
+  ist, wenn er im Inneren von $D$ liegt.  
+  Da $f(q)$ bei $q = 0$ meromorph ist, können sich die
+  Null- und Polstellen dort nicht häufen, das heißt es existiert ein $r > 0$,
+  so daß $f(q)$ keine Null- und Polstellen für $0 < |q| < r$ besitzt. Es folgt,
+  daß $f(\tau)$ keine Null- und Polstellen für $\Im \tau > v \coloneqq \frac 1{2 \pi} \log(\frac 1 r)$
+  besitzt. Damit sind alle $p$ mit $\nu_p(f) \neq 0$ in $D' \coloneqq \{\tau \in D\mid \Im \tau < v\}$
+  enthalten und letztere Menge ist kompakt. Da die Null- und Polstellen isoliert
+  sind, folgt die Endlichkeit der Summe. Als nächstes betrachten den Rand von $D'$
+  als geschlossenen Integrationsweg $\gamma$, der beim Punkt $-\frac 1 2 + i v$
+  beginnt und über die Punkte $\rho$, $i$, $-\frac 1\rho$ und $\frac 1 2 + iv$
+  wieder zurück nach $-\frac 1 2 + iv$ läuft.
+  
+  Nehmen wir für den Moment vereinfachend an, daß sich auf $\gamma$ weder Null-
+  noch Polstellen von $f(\tau)$ befinden, so liefert das Null- und Polstellen zählende
+  Integral, daß
+  \[
+    \frac 1 {2 \pi i} \oint_\gamma \frac{df}{f}    % besser df/f oder dlog f
+    = \sum_p \nu_p(f).
+  \]
+  Auf der anderen Seite können wir das Integral wie folgt zusammensetzen:
+  \[
+    \frac 1 {2 \pi i} \oint_\gamma \frac{df} f =
+    \frac 1 {2\pi i} \Biggl(\int_{- \frac 1 2 + iv}^\rho \frac{df}f + \int_\rho^i \frac{df}f
+    + \int_i^{-\frac 1 \rho} \frac{df}f + \int_{-\frac 1\rho}^{\frac 1 2 + i v} \frac{df}f
+    + \int_{\frac 1 2 + i v}^{-\frac 1 2 + i v} \frac{df} f\Biggr).
+  \]
+  Das erste und das vierte Integral heben sich aufgrund der Invariant von $f(\tau)$
+  unter $\tau \to \tau + 1$ gegenseitig auf, da der Durchlauf in umgekehrter
+  Richtung erfolgt. Das fünfte Integral berechnet sich durch
+  \[
+    \frac 1 {2\pi} \int_{\frac 1 2 + iv}^{-\frac 1 2 + iv} \frac{df} f
+    = - \frac 1{2 \pi i} \oint_{|q| = r} \frac{df} f = - \nu_{i\infty}(f),
+  \]  
+  wobei das Minuszeichen aus der Tatsache resultiert, daß beim Durchlauf von
+  $\tau$ von $\frac 1 2 + iv$ nach $-\frac 1 2 + iv$ der Kreis mit Radius $r$
+  um $q = 0$ in negativer Richtung durchlaufen wird.
+  Das dritte Integral über den Kreisbogen um $0$ von $i$ nach $-\frac 1\rho$
+  behandeln wir mit der Substitution $\tau \mapsto - \frac 1\tau$ und erhalten
+  \[
+    \frac 1{2\pi i} \int_i^{-\frac 1 \rho} \frac{df} f
+    = \frac 1{2\pi i} \int_i^\rho \Bigl(\frac{df} f + k \, \frac{d\tau}{\tau}\Bigr)
+  \]
+  wegen $f(-\frac 1\tau) = \tau^k f(\tau)$. Damit ergibt die Summe vom zweiten
+  und dritten Integral insgesamt
+  \[
+    \frac 1{2\pi i} \int_i^\rho k \, \frac{d\tau}{\tau} = \frac k{12}.
+  \]
+  Wir erhalten damit insgesamt
+  \[
+    \sum_p \nu_p(f) = -\nu_{i\infty}(f) + \frac k{12},
+  \]
+  womit die Formel für den zunächst betrachteten Spezialfall bewiesen ist.
+  
+  Sollten Null- oder Polstellen $a$ auf der Vertikalen von $-\frac 1 2 + iv$
+  nach $\rho$ liegen, so können wir an diesen Stellen und den entsprechenden
+  Stellen $a + 1$ auf der Vertikalen von $-\frac 1 2 + iv$ ein Stück der Kurve $\gamma$ durch
+  einen kleinen Halbkreisbogen ersetzen, der $a$ zur Hälfte positiv umläuft und
+  $a + 1$ negativ umläuft. Die obige Argumentation bleibt richtig, so daß wir den
+  Satz auch in diesem Falle bewiesen haben. Ähnlich können wir argumentieren, wenn
+  Null- und Polstellen auf dem Kreisbogen echt zwischen $\rho$ und $i$ liegen.
+  
+  Es bleibt der Fall, daß Null- und Polstellen bei $\rho$, $i$ oder $-\frac 1\rho$
+  liegen. In diesem Falle ersetzen wir den Integrationsweg $\gamma$ bei
+  $\rho$ und $\rho'$ durch einen kleinen Sechstelkreis ins Innere von $D'$ und bei $i$ durch
+  einen kleinen Halbkreis ebenfalls ins innere von $D'$. Das Integral (inklusive
+  dem Faktor $\frac 1{2\pi i}$ über die
+  beiden Sechstelkreise gibt dann jeweils $- \frac 1 6 \nu_\rho(f)$ und das
+  Integral über den kleinen Halbkreis $-\frac 1 2 \nu_i(f)$ (die Vorzeichen entstehen,
+  da die Sechstel- und Halbkreise in negativer Richtung umlaufen werden). Insgesamt
+  bekommen wir noch einen Beitrag von $\frac 1 2 \nu_i(f) + \frac 1 3 \nu_\rho(f)$,
+  da $\nu_{-\frac 1 \rho} (f) = \nu_\rho(f)$. Wir erhalten damit die allgemeine
+  Formel.
+\end{proof}
+
+\begin{cor}
+  Die \emph{Diskriminante}
+  \[
+    \Delta(\tau) \coloneqq g_2(\tau)^3 - 27 g_3(\tau)^2
+  \]
+  ist eine auf $\mathbf H$ nirgends verschwindende Modulform vom Gewicht $12$,
+  welche eine einfache Nullstelle bei $i\infty$ besitzt.  
+\end{cor}
+
+\begin{proof}
+  Daß $\Delta(\tau)$ eine Modulform vom Gewicht $12$ darstellt ist klar, denn dies
+  gilt für ihre beiden Summanden, da $g_2$ eine Modulform vom Gewicht $4$ und
+  $g_3$ eine Modulform vom Gewicht $6$ ist.
+
+  Aus dem Satz folgt für $g_2$, daß
+  \[
+    \nu_{i\infty}(g_2) + \frac 1 2 \nu_i(g_2) + \frac 1 3 \nu_\rho(g_2) = \frac 1 3.
+  \]
+  (Der Summenterm muß verschwinden, da alle Beiträge mindestens $1$ sind.)
+  Diese Gleichung erlaubt in den nicht-negativen ganzen Zahlen nur die Lösung
+  $\nu_{i\infty}(g_2) = 0$, $\nu_i(g_2) = 0$, $\nu_\rho(g_2) = 1$, das heißt
+  $g_2$ hat eine einzige Nullstelle modulo $\Gamma$, nämlich bei $\rho$. Ganz
+  ähnlich folgt, daß $g_3$ ebenfalls nur eine einzige Nullstelle modulo $\Gamma$
+  hat, nämlich bei $i$. Damit ist insbesondere $\Delta(i) = g_2(i)^3 \neq 0$,
+  das heißt $\Delta$ ist eine nicht verschwindende Modulform. Wegen
+  \[
+    \begin{split}
+      \Delta(i\infty) & = g_2(i\infty)^3 - 27 \cdot g_3(i\infty)^2
+      \\
+      & = (120 \zeta(4))^3 - 27 \cdot (280 \zeta(6))^2
+      \\
+      & = \Bigl(\frac 4 3 \pi^2\Bigr)^3 - 27 \cdot \Bigl(\frac 8 {27} \pi^3\Bigr)^2
+      \\
+      & = 0,
+    \end{split}
+  \]
+  ist $\nu_{i\infty}(\Delta) \ge 1$. Damit folgt aber aus dem Satz, daß
+  $\Delta(\tau)$ keine weiteren Nullstellen hat und die Nullstelle
+  bei $i\infty$ einfach ist.
+\end{proof}
+
+\begin{cor}
+  Die Kleinsche $j$-Funktion
+  \[
+    j(\tau) \coloneqq 1728 \cdot \frac{g_2(\tau)^3}{\Delta(\tau)}
+  \]
+  ist eine Modulfunktion vom Gewicht $0$. Sie ist holomorph auf $\mathbf H$ und
+  hat einen einfachen Pol bei $i\infty$. Sie induziert eine
+  Bijektion von $\Gamma\backslash \mathbf H$ auf $\mathbf C$.
+\end{cor}
+
+\begin{proof}
+  Daß $j(\tau)$ vom Gewicht $0$ ist, folgt aus der Tatsache, daß
+  Zähler und Nenner beide Modulformen vom Gewicht $12$ sind. Daß $j(\tau)$ holomorph
+  ist mit einem einfachen Pol bei $i\infty$, folgt aus der Nullstellenfreiheit von $\Delta(\tau)$ auf $\mathbf H$
+  und der Tatsache, daß $\Delta(\tau)$ bei $i\infty$ eine einfache Nullstelle
+  hat, $g_2(\tau)$ dort aber nicht verschwindet.
+  Sei $c \in \mathbf C$. Der Satz auf $f(\tau) \coloneqq j(\tau) - c$ angewandt liefert dann
+  \[
+    -1 + \frac 1 2 \nu_i(f) + \frac 1 3 \nu_\rho(f) + \sum_p \nu_p(f) = 0,
+  \]
+  das heißt nur genau einer der Beiträge $\nu_i(f)$, $\nu_\rho(f)$ oder $\nu_p(f)$ nimmt
+  einen von Null verschiedenen Wert an.
+\end{proof}
+
+\begin{cor}
+  Für je zwei Zahlen $c_2$, $c_3 \in \mathbf C$ mit $c_2^3 - 27 c_3^2 \neq 0$ existiert
+  ein $\tau \in \mathbf H$, so daß
+  \[
+    g_2(\tau) = \alpha^4 c_2\quad\text{und}\quad g_3(\tau) = \alpha^6 c_3
+  \]
+  für ein $\alpha \in \mathbf C \setminus \{0\}$.
+\end{cor}
+
+\begin{proof}
+  Die Surjektivität der Kleinschen $j$-Funktion liefert die Existenz von
+  $\tau \in \mathbf H$ mit
+  \[
+    \frac{g_2(\tau)^3}{g_2(\tau)^3 - 27 g_3(\tau)^2} = \frac{c_2^3}{c_2^3 - 27 c_3^2},
+  \] 
+  das heißt, es existiert ein $\alpha \neq 0$ mit
+  $g_2(\tau)^3 = \alpha^{12} a_2^3$ und $g_3(\tau)^2 = \alpha^{12} a_3^2$. Da
+  wir $\alpha$ noch um eine zwölfte Einheitswurzel abändern können, folgt die
+  Behauptung.
+\end{proof}
+
+\appendix
+
+\chapter{Charaktere}
+
+\section{Charaktere endlicher abelscher Gruppen}
+
+\begin{dfn}
+  Sei $G$ eine endliche abelsche Gruppe, hier und im folgenden multiplikativ geschrieben. Ein \emph{Charakter}
+  von $G$ ist ein Gruppenhomomorphismus $\chi\colon G \to \mathbf C^\times$ von $G$ in die multiplikative
+  Gruppe von $\mathbf C$.
+  
+  Die Menge der Charaktere wird durch punktweise Multiplikation zu einer Gruppe, der \emph{dualen Gruppe
+  $\widehat G$ von $G$}.
+\end{dfn}
+
+\begin{xca}
+  \label{xca:cyclic}
+  Sei $G$ eine zyklische Gruppe der Ordnung $n$\footnote{Die \emph{Ordnung} einer Gruppe ist bekanntlich
+  die Anzahl ihrer Elemente.} mit Erzeuger $s$\footnote{Ein Element $s$ einer Gruppe heißt \emph{Erzeuger},
+  wenn jedes Gruppenelement eine Potenz von $s$ ist. Hier ist $G = \{1, s, s^2, \dotsc, s^{n - 1}\}$.}
+  $\chi\colon G \to \mathbf C^\times$ ein Charakter, so ist $\chi(s)^n = \chi(s^n) = \chi(1) = 1$,
+  das heißt, $\chi(s)$ ist eine $n$-te Einheitswurzel $e^{\frac{2 \pi i k}n}$,
+  $k = 0$, \dots, $n - 1$.
+  
+  Ist umgekehrt $\omega$ eine $n$-te Einheitswurzel, so definiert $\chi(s^a) \coloneqq \omega^a$
+  einen Charakter $\chi\colon G \to \mathbf C^\times$ von $G$.
+  
+  Mit anderen Worten ist $\widehat G \to G, \chi \mapsto \chi(s)$
+  ein Isomorphismus. Insbesondere ist $\widehat G$ wieder zyklisch und von der
+  gleichen Ordnung wie $G$.
+\end{xca}
+
+\begin{prop}
+  Sei $H \subseteq G$ eine Untergruppe einer endlichen abelschen Gruppe $G$. Dann
+  ist
+  \[
+    \hat G \to \hat H, \chi \mapsto \chi|H
+  \]
+  surjektiv, das heißt jeder Charakter auf $H$ setzt sich zu einem Charakter auf
+  $G$ fort.
+\end{prop}
+
+\begin{proof}
+  Sei $\chi\colon H \to \mathbf C^\times$ ein Charakter. Sei $\chi'\colon H' \to \mathbf C^\times$
+  eine maximale Fortsetzung von $\chi$, das heißt $\chi'$ ist ein Charakter
+  auf einer Untergruppe $H'$ mit $H \subseteq H'$ und $\chi'|H = \chi$ und der
+  Charakter läßt sich nicht weiter fortsetzen.
+  
+  Angenommen, $H' \neq G$. Dann existiert ein $x \in G \setminus H'$. Sei $n > 1$
+  minimal mit $x^n \in H'$. Sei $t \coloneqq \chi'(x^n)$ und $\omega \in \mathbf C^\times$
+  mit $\omega^n = t$. Sei
+  \[
+    H'' = \{h' x^a \mid h' \in H', a \in \mathbf Z\}
+  \]
+  die von $H'$ und $x$ in $G$ erzeugte Untergruppe. Dann definiert
+  \[
+    \chi''(h' x^a) \coloneqq \chi'(h') \cdot \omega^a
+  \]
+  einen Charakter $\chi''$ von $H''$, welcher $\chi'$ fortsetzt,
+  ein Widerspruch zur Maximalität von $\chi'$. Also ist $H' = G$ und $\chi'$
+  setzt $\chi$ auf $G$ fort. 
+\end{proof}
+
+% KURZE EXAKTE SEQUENZ?
+\begin{cor}
+  Ist 
+  \[
+    1 \to H \to G \to G/H \to 1
+  \]
+  eine kurze exakte Sequenz endlicher abelscher Gruppen, so folgt, daß die
+  Einschränkung $\widehat G \to \widehat H$ eine kurze exakte Sequenz
+  \[
+    1 \to \widehat{G/H} \to \widehat G \to \widehat H \to 1
+  \]
+  definiert.
+  \qed 
+\end{cor}
+
+\begin{prop}
+  Die duale Gruppe $\widehat G$ einer endlichen abelschen Gruppe $G$ hat
+  die gleiche Ordnung wie $G$.
+\end{prop}
+
+\begin{proof}
+  Wir führen den Beweis per Induktion über die Ordnung $n$ von $G$. Der Fall
+  $n = 1$ ist trivial. Im Falle $n > 1$ sei $x \neq 1$ ein Element von $G$
+  und $H$ die von $x$ erzeugte zyklische Untergruppe. Dann ist nach der Folgerung
+  die Ordnung von $\widehat G$ das Produkt der Ordnungen von $\widehat H$ und $\widehat{G/H}$.
+  Nach Beispiel~\ref{xca:cyclic} hat $\widehat H$ die gleiche Ordnung wie $H$
+  und nach Induktionsvoraussetzung hat $\widehat{G/H}$ die gleiche Ordnung wie
+  $G/H$. Also ist die Ordnung von $\widehat G$ das Produkt der Ordnungen von
+  $H$ und $G/H$, also die Ordnung von $G$.
+\end{proof}
+
+\begin{prop}
+  Sei $G$ eine endliche abelsche Gruppe.
+  Der Homomorphismus
+  \[
+    \epsilon\colon G \to \hat{\hat G}, x \mapsto (\chi \mapsto \chi(x))
+  \]
+  ist ein Gruppenisomorphismus von $G$ auf ihr \emph{Bidual $\hat{\hat G}$}.
+\end{prop}
+
+\begin{proof}
+  Da $G$ und $\hat{\hat G}$ die gleiche Ordnung haben, reicht es, $\ker \epsilon = 1$
+  nachzuweisen. Sei dazu $x \neq 1$ ein Element in $G$. Sei $H$ die von $x$ in $G$
+  erzeugte zyklische Untergruppe. Nach Beispiel~\ref{xca:cyclic} existiert ein Charakter
+  $\chi$ von $H$ mit $\chi(x) \neq 1$. Nennen wir eine Fortsetzung von $\chi$ auf $G$
+  wieder $\chi$. Dann gilt
+  \[
+    \epsilon(x)(\chi) = \chi(x) \neq 1,
+  \] 
+  also ist jedes $x \neq 1$ nicht im Kern von $\epsilon$.
+\end{proof}
+
+\begin{prop}
+  \label{prop:character}
+  Seien $G$ eine endliche abelsche Gruppe und $x \in G$. Für jede komplexe
+  Zahl $z$ gilt dann
+  \[
+    \prod_{\chi \in \hat G} (1 - \chi(x) z) = (1 - z^f)^g,
+  \]
+  wobei $f$ die Ordnung von $x$ in $G$\footnote{Die \emph{Ordnung} eines Elementes $x$ in einer Gruppe
+  $G$ ist die kleinste ganze Zahl $n > 1$, so daß $x^n = 1$} und $g$ den Index von $x$ (das heißt
+  den Index\footnote{Der \emph{Index} einer Untergruppe $H$ von $G$ ist die Anzahl der Elemente in
+  $G/H$, das ist die Ordnung von $G$ dividiert durch die Ordnung von $H$.}
+  der von $x$ in $G$ erzeugten Untergruppe) bezeichnet.
+\end{prop}
+
+\begin{proof}
+  Sei $H$ die von $x$ erzeugte Untergruppe. Dann durchläuft $\chi'(x)$, $\chi' \in \hat H$
+  genau die $f$-ten Einheitswurzeln, das heißt
+  \[
+    \prod_{\chi' \in H} (1 - \chi'(x) z) = (1 - z^f).
+  \]
+  Unter der surjektiven Abbildung $\hat G \to \hat H, \chi \mapsto \chi|H$ hat
+  jeder Charakter $\chi' \in H$ genau $g$ Urbilder, woraus die Behauptung folgt.
+\end{proof}
+
+\section{Orthogonalitätsrelationen}
+
+\begin{prop}
+  Sei $G$ eine endliche abelsche Gruppe der Ordnung $n$. Für jeden Charakter $\chi \in \hat G$
+  gilt
+  \[
+    \sum_{x \in G} \chi(x) = \begin{cases}
+      n & \text{für $\chi = 1$} \\
+      0 & \text{für $\chi \neq 1$}.
+    \end{cases}
+  \]  
+\end{prop}
+
+\begin{proof}
+  Der Fall $\chi = 1$ ist trivial. Sei also $\chi \neq 1$.
+  Es existiert also ein $y \in G$ mit $\chi(y) \neq 1$. Da $G \to G, x \mapsto x y$ eine 
+  Bijektion ist, gilt
+  \[
+    \chi(y) \sum_{x \in G} \chi(x) = \sum_{x \in G} \chi(xy) = \sum_{x \in G} \chi(x),
+  \]
+  also $(\chi(y) - 1) \sum_{x \in G} \chi(x) = 0$, woraus wegen $\chi(y) \neq 1$ die
+  Behauptung folgt. 
+\end{proof}
+
+\begin{cor}
+  Sei $G$ eine endliche abelsche Gruppe der Ordnung $n$. Für jedes Gruppenelement
+  $x \in G$ gilt
+  \[
+    \sum_{\chi \in \hat G} \chi(x) = \begin{cases}
+      n & \text{für $x = 1$} \\
+      0 & \text{für $x \neq 1$}.
+    \end{cases}
+    \pushQED{\qed}
+    \qedhere
+    \popQED
+  \]
+\end{cor}
+
+\section{Dirichletsche Charaktere}
+
+% euler phi funktion
+% chi mod m
+
+\begin{dfn}
+  Sei jetzt und im folgenden $q \ge 1$ eine natürliche Zahl, der \emph{Modulus}. Ein \emph{Dirichletscher Charakter} ist
+  ein Charakter $\chi$ der Gruppe
+  \[
+    (\mathbf Z/(q))^\times = \{n \in \mathbf Z/(q) \mid (n, q) = 1\}\footnote{Nach dem erweiterten Euklidischen
+  Algorithmus besitzt eine ganze Zahl genau dann eine Inverse modulo $q$, wenn sie zu $q$ teilerfremd ist.}
+  \]
+  der invertierbaren Zahlen modulo $q$
+  (wobei $(n, q)$ den größten gemeinsamen Teiler von $n$ und $q$ bezeichne).
+  
+  Wir setzen den Charakter $\chi$ durch Null zu einer multiplikativen Abbildung $\chi\colon \mathbf Z/(q) \to \mathbf C$
+  fort, also zu einer multiplikativen $q$-periodischen Abbildung
+  $\chi\colon \mathbf Z \to \mathbf C$ fort.
+\end{dfn}
+
+\begin{xca}
+  Der \emph{triviale Charakter $1_q\colon \mathbf Z \to \mathbf C$} ist durch
+  \[
+    1_q(n) = \begin{cases}
+      1 & \text{für $(n, q) \neq 1$ und} \\
+      0 & \text{sonst}
+    \end{cases}
+  \]
+  gegeben.
+\end{xca}
+
+\begin{dfn}
+  Mit $\totient(q)$ bezeichnen wir den Wert der \emph{Eulerschen $\phi$-Funktion} an
+  der Stelle $q$, also die Ordnung der Gruppe $(\mathbf Z/(q))^\times$\footnote{Diese Ordnung stimmt mit der Anzahl der zu $q$ teilerfremden
+  natürlichen Zahlen in der Menge $0$, \dots, $q - 1$ überein.}.
+\end{dfn}
+
+\begin{xca}
+  Für die Summe aller Dirichletschen Charaktere modulo $q$ gilt
+  \[
+    \sum_\chi \chi = \begin{cases}
+      \totient(q) & \text{für $n \equiv 1$ modulo $q$ und} \\
+      0 & \text{sonst}.
+    \end{cases}
+  \]
+\end{xca}
+
+\end{document}
