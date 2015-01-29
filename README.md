@@ -1,2 +1,2 @@
-# funktionentheorie
+# Funktionentheorie
 Spezielle Kapitel zur Funktionentheorie
